@@ -1,51 +1,3 @@
-#region CopyRight 2018
-/*
-    Copyright (c) 2003-2018 Andreas Rohleder (andreas@rohleder.cc)
-    All rights reserved
-*/
-#endregion
-#region License LGPL-3
-/*
-    This program/library/sourcecode is free software; you can redistribute it
-    and/or modify it under the terms of the GNU Lesser General Public License
-    version 3 as published by the Free Software Foundation subsequent called
-    the License.
-
-    You may not use this program/library/sourcecode except in compliance
-    with the License. The License is included in the LICENSE file
-    found at the installation directory or the distribution package.
-
-    Permission is hereby granted, free of charge, to any person obtaining
-    a copy of this software and associated documentation files (the
-    "Software"), to deal in the Software without restriction, including
-    without limitation the rights to use, copy, modify, merge, publish,
-    distribute, sublicense, and/or sell copies of the Software, and to
-    permit persons to whom the Software is furnished to do so, subject to
-    the following conditions:
-
-    The above copyright notice and this permission notice shall be included
-    in all copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-    LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-#endregion
-#region Authors & Contributors
-/*
-   Author:
-     Andreas Rohleder <andreas@rohleder.cc>
-
-   Contributors:
-
- */
-#endregion
-
-using Cave.Text;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -75,8 +27,12 @@ namespace Cave.Collections.Generic
         /// <returns></returns>
         public static OptionCollection FromDictionary(IDictionary dictionary)
         {
-            if (dictionary == null) throw new ArgumentNullException("dictionary");
-            List<Option> opts = new List<Option>(); 
+            if (dictionary == null)
+            {
+                throw new ArgumentNullException("dictionary");
+            }
+
+            List<Option> opts = new List<Option>();
             foreach (DictionaryEntry entry in dictionary)
             {
                 opts.Add(Option.FromDictionaryEntry(entry));
@@ -92,11 +48,19 @@ namespace Cave.Collections.Generic
         /// <exception cref="ArgumentNullException">texts</exception>
         public static OptionCollection FromStrings(string[] lines, bool ignoreInvalid = false)
         {
-            if (lines == null) throw new ArgumentNullException("texts");
+            if (lines == null)
+            {
+                throw new ArgumentNullException("texts");
+            }
+
             List<Option> opts = new List<Option>();
             foreach (string line in lines)
             {
-                if (ignoreInvalid && !Option.IsOption(line)) continue;
+                if (ignoreInvalid && !Option.IsOption(line))
+                {
+                    continue;
+                }
+
                 opts.Add(Option.Parse(line));
             }
             OptionCollection result = new OptionCollection(opts);
@@ -114,7 +78,11 @@ namespace Cave.Collections.Generic
         /// <param name="enumeration">The <see cref="IEnumerable"/> list of <see cref="Option"/>s</param>
         public OptionCollection(IEnumerable<Option> enumeration)
         {
-            if (enumeration == null) throw new ArgumentNullException("enumeration");
+            if (enumeration == null)
+            {
+                throw new ArgumentNullException("enumeration");
+            }
+
             foreach (Option option in enumeration)
             {
                 m_Items.Add(option.Name, option);
@@ -128,7 +96,11 @@ namespace Cave.Collections.Generic
         /// <returns></returns>
         public bool Contains(string optionName)
         {
-            if (optionName == null) throw new ArgumentNullException("optionName");
+            if (optionName == null)
+            {
+                throw new ArgumentNullException("optionName");
+            }
+
             return m_Items.ContainsA(optionName);
         }
 
@@ -139,8 +111,16 @@ namespace Cave.Collections.Generic
         /// <returns>Returns the index of the first option or -1 if no option with the specified name can be found</returns>
         int IndexOf(string optionName)
         {
-            if (optionName == null) throw new ArgumentNullException("optionName");
-            if (Option.GetPrefix(optionName) != null) throw new ArgumentException("Do not prefix the optionname with an option prefix!");
+            if (optionName == null)
+            {
+                throw new ArgumentNullException("optionName");
+            }
+
+            if (Option.GetPrefix(optionName) != null)
+            {
+                throw new ArgumentException("Do not prefix the optionname with an option prefix!");
+            }
+
             return m_Items.IndexOfA(optionName);
         }
 
@@ -152,21 +132,23 @@ namespace Cave.Collections.Generic
         /// <returns>Returns the index of the first option or -1 if no option with the specified name can be found</returns>
         int IndexOf(string optionName, int start)
         {
-            if (optionName == null) throw new ArgumentNullException("optionName");
-            if (Option.GetPrefix(optionName) != null) throw new ArgumentException("Do not prefix the optionname with an option prefix!");
+            if (optionName == null)
+            {
+                throw new ArgumentNullException("optionName");
+            }
+
+            if (Option.GetPrefix(optionName) != null)
+            {
+                throw new ArgumentException("Do not prefix the optionname with an option prefix!");
+            }
+
             return m_Items.IndexOfA(optionName, start);
         }
 
         /// <summary>
         /// Obtains all option names
         /// </summary>
-        public string[] Names
-        {
-            get
-            {
-                return m_Items.ItemsA;
-            }
-        }
+        public string[] Names => m_Items.ItemsA;
 
         /// <summary>
         /// Allows direct access to the first<see cref="Option"/> with the specified name
@@ -179,7 +161,11 @@ namespace Cave.Collections.Generic
             get
             {
                 int index = IndexOf(optionName);
-                if (index < 0) throw new ArgumentOutOfRangeException(nameof(optionName));
+                if (index < 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(optionName));
+                }
+
                 return this[index];
             }
         }
@@ -189,10 +175,7 @@ namespace Cave.Collections.Generic
         /// </summary>
         /// <param name="optionIndex">Index of the option</param>
         /// <returns></returns>
-        Option this[int optionIndex]
-        {
-            get { return m_Items.GetB(optionIndex); }
-        }
+        Option this[int optionIndex] => m_Items.GetB(optionIndex);
 
         /// <summary>
         /// Obtains a string containing all options
@@ -204,11 +187,22 @@ namespace Cave.Collections.Generic
             foreach (Option option in this)
             {
                 string optionString = option.ToString();
-                if (result.Length > 0) result.Append(" ");
+                if (result.Length > 0)
+                {
+                    result.Append(" ");
+                }
+
                 bool containsSpace = (optionString.IndexOf(' ') > -1);
-                if (containsSpace) result.Append('"');
+                if (containsSpace)
+                {
+                    result.Append('"');
+                }
+
                 result.Append(optionString);
-                if (containsSpace) result.Append('"');
+                if (containsSpace)
+                {
+                    result.Append('"');
+                }
             }
             return result.ToString();
         }
@@ -254,18 +248,12 @@ namespace Cave.Collections.Generic
         /// <summary>
         /// Obtains the number of items present.
         /// </summary>
-        public int Count
-        {
-            get { return m_Items.Count; }
-        }
+        public int Count => m_Items.Count;
 
         /// <summary>
         /// Returns false
         /// </summary>
-        public bool IsReadOnly
-        {
-            get { return true; }
-        }
+        public bool IsReadOnly => true;
 
         /// <summary>
         /// Obtains all options of the collection as one dimensional array
@@ -285,11 +273,22 @@ namespace Cave.Collections.Generic
         /// <returns></returns>
         public bool Equals(OptionCollection other)
         {
-            if (ReferenceEquals(null, other)) return false;
-            if (Count != other.Count) return false;
-            for (int i = 0; i < m_Items.Count; i++ )
+            if (ReferenceEquals(null, other))
             {
-                if (!m_Items[i].Equals(other.m_Items[i])) return false;
+                return false;
+            }
+
+            if (Count != other.Count)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < m_Items.Count; i++)
+            {
+                if (!m_Items[i].Equals(other.m_Items[i]))
+                {
+                    return false;
+                }
             }
             return true;
         }

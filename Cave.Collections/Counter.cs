@@ -1,50 +1,3 @@
-#region CopyRight 2018
-/*
-    Copyright (c) 2003-2018 Andreas Rohleder (andreas@rohleder.cc)
-    All rights reserved
-*/
-#endregion
-#region License LGPL-3
-/*
-    This program/library/sourcecode is free software; you can redistribute it
-    and/or modify it under the terms of the GNU Lesser General Public License
-    version 3 as published by the Free Software Foundation subsequent called
-    the License.
-
-    You may not use this program/library/sourcecode except in compliance
-    with the License. The License is included in the LICENSE file
-    found at the installation directory or the distribution package.
-
-    Permission is hereby granted, free of charge, to any person obtaining
-    a copy of this software and associated documentation files (the
-    "Software"), to deal in the Software without restriction, including
-    without limitation the rights to use, copy, modify, merge, publish,
-    distribute, sublicense, and/or sell copies of the Software, and to
-    permit persons to whom the Software is furnished to do so, subject to
-    the following conditions:
-
-    The above copyright notice and this permission notice shall be included
-    in all copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-    LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-#endregion
-#region Authors & Contributors
-/*
-   Author:
-     Andreas Rohleder <andreas@rohleder.cc>
-
-   Contributors:
-
- */
-#endregion
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -62,8 +15,16 @@ namespace Cave.Collections
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(Counter counter1, Counter counter2)
         {
-            if (ReferenceEquals(null, counter1)) return ReferenceEquals(null, counter2);
-            if (ReferenceEquals(null, counter2)) return false;
+            if (ReferenceEquals(null, counter1))
+            {
+                return ReferenceEquals(null, counter2);
+            }
+
+            if (ReferenceEquals(null, counter2))
+            {
+                return false;
+            }
+
             return counter1.Count == counter2.Count && counter1.Start == counter2.Start && counter1.End == counter2.End && counter1.Step == counter2.Step;
         }
 
@@ -73,8 +34,16 @@ namespace Cave.Collections
         /// <returns>The result of the operator.</returns>
         public static bool operator !=(Counter counter1, Counter counter2)
         {
-            if (ReferenceEquals(null, counter1)) return !ReferenceEquals(null, counter2);
-            if (ReferenceEquals(null, counter2)) return true;
+            if (ReferenceEquals(null, counter1))
+            {
+                return !ReferenceEquals(null, counter2);
+            }
+
+            if (ReferenceEquals(null, counter2))
+            {
+                return true;
+            }
+
             return counter1.Count != counter2.Count || counter1.Start != counter2.Start || counter1.End != counter2.End || counter1.Step != counter2.Step;
         }
 
@@ -84,8 +53,16 @@ namespace Cave.Collections
         /// <returns>The result of the operator.</returns>
         public static bool operator <(Counter counter1, Counter counter2)
         {
-            if (ReferenceEquals(counter1, null)) return true;
-            if (ReferenceEquals(counter2, null)) return false;
+            if (ReferenceEquals(counter1, null))
+            {
+                return true;
+            }
+
+            if (ReferenceEquals(counter2, null))
+            {
+                return false;
+            }
+
             return counter1.End < counter2.Start;
         }
 
@@ -95,8 +72,16 @@ namespace Cave.Collections
         /// <returns>The result of the operator.</returns>
         public static bool operator >(Counter counter1, Counter counter2)
         {
-            if (ReferenceEquals(counter2, null)) return true;
-            if (ReferenceEquals(counter1, null)) return false;
+            if (ReferenceEquals(counter2, null))
+            {
+                return true;
+            }
+
+            if (ReferenceEquals(counter1, null))
+            {
+                return false;
+            }
+
             return counter1.Start > counter2.End;
         }
 
@@ -178,8 +163,16 @@ namespace Cave.Collections
             Count = count;
             End = Start + Count - 1;
             Step = step;
-            if (Count < 0) throw new ArgumentException(string.Format("Argument {0} has an invalid value!", "Count"));
-            if (Step < 1) throw new ArgumentException(string.Format("Argument {0} has an invalid value!", "Step"));
+            if (Count < 0)
+            {
+                throw new ArgumentException(string.Format("Argument {0} has an invalid value!", "Count"));
+            }
+
+            if (Step < 1)
+            {
+                throw new ArgumentException(string.Format("Argument {0} has an invalid value!", "Step"));
+            }
+
             Reset();
         }
 
@@ -190,8 +183,16 @@ namespace Cave.Collections
         /// <returns>Returns true if the value is part of the counter</returns>
         public bool Contains(int value)
         {
-            if (value > End) return false;
-            if (value < Start) return false;
+            if (value > End)
+            {
+                return false;
+            }
+
+            if (value < Start)
+            {
+                return false;
+            }
+
             return (((value - Start) % Step) == 0);
         }
 
@@ -202,12 +203,36 @@ namespace Cave.Collections
         /// <returns>Returns true if the specified counter is part of the counter</returns>
         public bool Contains(Counter counter)
         {
-            if (counter == null) throw new ArgumentNullException("counter");
-            if (counter.Start < Start) return false;
-            if (counter.Start > End) return false;
-            if (counter.End > End) return false;
-            if (counter.End < Start) return false;
-            if ((counter.Step % Step) > 0) return false;
+            if (counter == null)
+            {
+                throw new ArgumentNullException("counter");
+            }
+
+            if (counter.Start < Start)
+            {
+                return false;
+            }
+
+            if (counter.Start > End)
+            {
+                return false;
+            }
+
+            if (counter.End > End)
+            {
+                return false;
+            }
+
+            if (counter.End < Start)
+            {
+                return false;
+            }
+
+            if ((counter.Step % Step) > 0)
+            {
+                return false;
+            }
+
             return true;
         }
 
@@ -217,7 +242,11 @@ namespace Cave.Collections
         /// <returns>Returns true if the next value is part of the counter and can be retrieved</returns>
         public bool MoveNext()
         {
-            if (m_Current > End) throw new InvalidOperationException(string.Format("Moving out of range!"));
+            if (m_Current > End)
+            {
+                throw new InvalidOperationException(string.Format("Moving out of range!"));
+            }
+
             m_Current += Step;
             return m_Current <= End;
         }
@@ -237,8 +266,16 @@ namespace Cave.Collections
         {
             get
             {
-                if (m_Current < Start) throw new InvalidOperationException(string.Format("Invalid operation, use MoveNext() first!"));
-                if (m_Current > End) throw new InvalidOperationException(string.Format("Invalid operation, moved out of range!"));
+                if (m_Current < Start)
+                {
+                    throw new InvalidOperationException(string.Format("Invalid operation, use MoveNext() first!"));
+                }
+
+                if (m_Current > End)
+                {
+                    throw new InvalidOperationException(string.Format("Invalid operation, moved out of range!"));
+                }
+
                 return (int)m_Current;
             }
         }
@@ -246,13 +283,7 @@ namespace Cave.Collections
         /// <summary>
         /// Obtains whether the counter was started already or not.
         /// </summary>
-        public bool Started
-        {
-            get
-            {
-                return m_Current >= Start;
-            }
-        }
+        public bool Started => m_Current >= Start;
 
         /// <summary>
         /// Checks another <see cref="Counter"/> for equality
@@ -262,7 +293,11 @@ namespace Cave.Collections
         public override bool Equals(object obj)
         {
             Counter other = obj as Counter;
-            if (ReferenceEquals(other, null)) return false;
+            if (ReferenceEquals(other, null))
+            {
+                return false;
+            }
+
             return (other.Start == Start) && (other.End == End) && (other.Step == Step);
         }
 
@@ -272,7 +307,11 @@ namespace Cave.Collections
         /// <returns>Returns a string representing this object</returns>
         public override string ToString()
         {
-            if (m_String != null) return m_String;
+            if (m_String != null)
+            {
+                return m_String;
+            }
+
             m_String = "x = k * " + Step + " | " + (Start - 1L) + " < k < " + (End + 1L);
             return m_String;
         }
@@ -322,7 +361,11 @@ namespace Cave.Collections
         public int CompareTo(object obj)
         {
             Counter other = obj as Counter;
-            if (other == null) return -1;
+            if (other == null)
+            {
+                return -1;
+            }
+
             return Start.CompareTo(other.Start);
         }
 

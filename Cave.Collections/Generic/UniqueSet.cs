@@ -1,50 +1,3 @@
-#region CopyRight 2018
-/*
-    Copyright (c) 2003-2018 Andreas Rohleder (andreas@rohleder.cc)
-    All rights reserved
-*/
-#endregion
-#region License LGPL-3
-/*
-    This program/library/sourcecode is free software; you can redistribute it
-    and/or modify it under the terms of the GNU Lesser General Public License
-    version 3 as published by the Free Software Foundation subsequent called
-    the License.
-
-    You may not use this program/library/sourcecode except in compliance
-    with the License. The License is included in the LICENSE file
-    found at the installation directory or the distribution package.
-
-    Permission is hereby granted, free of charge, to any person obtaining
-    a copy of this software and associated documentation files (the
-    "Software"), to deal in the Software without restriction, including
-    without limitation the rights to use, copy, modify, merge, publish,
-    distribute, sublicense, and/or sell copies of the Software, and to
-    permit persons to whom the Software is furnished to do so, subject to
-    the following conditions:
-
-    The above copyright notice and this permission notice shall be included
-    in all copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-    LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-#endregion
-#region Authors & Contributors
-/*
-   Author:
-     Andreas Rohleder <andreas@rohleder.cc>
-
-   Contributors:
-
- */
-#endregion
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -74,7 +27,7 @@ namespace Cave.Collections.Generic
         {
             m_LookupA.Clear();
             m_LookupB.Clear();
-            foreach(ItemPair<TKey1,TKey2> node in m_List)
+            foreach (ItemPair<TKey1, TKey2> node in m_List)
             {
                 m_LookupA.Add(node.A, node);
                 m_LookupB.Add(node.B, node);
@@ -128,8 +81,7 @@ namespace Cave.Collections.Generic
         /// <returns></returns>
         public bool TryGetA(TKey1 a, out TKey2 b)
         {
-            ItemPair<TKey1, TKey2> item;
-            if (m_LookupA.TryGetValue(a, out item))
+            if (m_LookupA.TryGetValue(a, out ItemPair<TKey1, TKey2> item))
             {
                 b = item.B;
                 return true;
@@ -147,8 +99,7 @@ namespace Cave.Collections.Generic
         /// <returns></returns>
         public bool TryGetB(TKey2 b, out TKey1 a)
         {
-            ItemPair<TKey1, TKey2> item;
-            if (m_LookupB.TryGetValue(b, out item))
+            if (m_LookupB.TryGetValue(b, out ItemPair<TKey1, TKey2> item))
             {
                 a = item.A;
                 return true;
@@ -168,7 +119,11 @@ namespace Cave.Collections.Generic
         /// <returns>The index of item if found in the list; otherwise, -1.</returns>
         public int IndexOfA(TKey1 A)
         {
-            if (!m_LookupA.ContainsKey(A)) return -1;
+            if (!m_LookupA.ContainsKey(A))
+            {
+                return -1;
+            }
+
             return m_List.IndexOf(m_LookupA[A]);
         }
 
@@ -180,53 +135,33 @@ namespace Cave.Collections.Generic
         /// <returns>The index of item if found in the list; otherwise, -1.</returns>
         public int IndexOfB(TKey2 B)
         {
-            if (!m_LookupB.ContainsKey(B)) return -1;
+            if (!m_LookupB.ContainsKey(B))
+            {
+                return -1;
+            }
+
             return m_List.IndexOf(m_LookupB[B]);
         }
 
         /// <summary>Obtains a enumeration of the A elements of the Set.</summary>
         /// <value>The keys a.</value>
-        public IEnumerable<TKey1> KeysA
-        {
-            get
-            {
-                return m_LookupA.Keys;
-            }
-        }
+        public IEnumerable<TKey1> KeysA => m_LookupA.Keys;
 
         /// <summary>Obtains a enumeration of the B elements of the Set.</summary>
         /// <value>The keys b.</value>
-        public IEnumerable<TKey2> KeysB
-        {
-            get
-            {
-                return m_LookupB.Keys;
-            }
-        }
+        public IEnumerable<TKey2> KeysB => m_LookupB.Keys;
 
         /// <summary>
         /// Obtains a read only indexed list for the A elements of the Set.
         /// This method is an O(1) operation;
         /// </summary>
-        public IList<TKey1> ItemsA
-        {
-            get
-            {
-                return new ReadOnlyListA<TKey1, TKey2>(this);
-            }
-        }
+        public IList<TKey1> ItemsA => new ReadOnlyListA<TKey1, TKey2>(this);
 
         /// <summary>
         /// Obtains a read only indexed list for the B elements of the Set.
         /// This method is an O(1) operation;
         /// </summary>
-        public IList<TKey2> ItemsB
-        {
-            get
-            {
-                return new ReadOnlyListB<TKey1, TKey2>(this);
-            }
-        }
+        public IList<TKey2> ItemsB => new ReadOnlyListB<TKey1, TKey2>(this);
 
         /// <summary>
         /// Obtains the A element that is assigned to the specified B element.
@@ -253,18 +188,12 @@ namespace Cave.Collections.Generic
         /// <summary>
         /// Gets the number of elements actually present at the Set.
         /// </summary>
-        public int Count
-        {
-            get { return m_List.Count; }
-        }
+        public int Count => m_List.Count;
 
         /// <summary>
         /// Returns false
         /// </summary>
-        public bool IsReadOnly
-        {
-            get { return false; }
-        }
+        public bool IsReadOnly => false;
 
         /// <summary>
         /// Returns an enumerator that iterates through the set.
@@ -327,7 +256,11 @@ namespace Cave.Collections.Generic
         /// <param name="item">The ItemPair to insert.</param>
         public void Insert(int index, ItemPair<TKey1, TKey2> item)
         {
-            if (item == null) throw new ArgumentNullException("item");
+            if (item == null)
+            {
+                throw new ArgumentNullException("item");
+            }
+
             m_LookupA.Add(item.A, item);
             try { m_LookupB.Add(item.B, item); }
             catch { m_LookupA.Remove(item.A); throw; }
@@ -344,8 +277,15 @@ namespace Cave.Collections.Generic
             try
             {
                 ItemPair<TKey1, TKey2> node = m_List[index];
-                if (!m_LookupA.Remove(node.A)) throw new KeyNotFoundException();
-                if (!m_LookupB.Remove(node.B)) throw new KeyNotFoundException();
+                if (!m_LookupA.Remove(node.A))
+                {
+                    throw new KeyNotFoundException();
+                }
+
+                if (!m_LookupB.Remove(node.B))
+                {
+                    throw new KeyNotFoundException();
+                }
             }
             catch
             {
@@ -362,16 +302,25 @@ namespace Cave.Collections.Generic
         /// <returns></returns>
         public ItemPair<TKey1, TKey2> this[int index]
         {
-            get
-            {
-                return m_List[index];
-            }
+            get => m_List[index];
             set
             {
-                if (value == null) throw new ArgumentNullException("value");
+                if (value == null)
+                {
+                    throw new ArgumentNullException("value");
+                }
+
                 ItemPair<TKey1, TKey2> old = m_List[index];
-                if (!m_LookupA.Remove(old.A)) throw new KeyNotFoundException();
-                if (!m_LookupB.Remove(old.B)) throw new KeyNotFoundException();
+                if (!m_LookupA.Remove(old.A))
+                {
+                    throw new KeyNotFoundException();
+                }
+
+                if (!m_LookupB.Remove(old.B))
+                {
+                    throw new KeyNotFoundException();
+                }
+
                 m_LookupA.Add(value.A, value);
                 try { m_LookupB.Add(value.B, value); }
                 catch { Clear(); throw; }
@@ -385,7 +334,11 @@ namespace Cave.Collections.Generic
         /// <param name="item"></param>
         public void Add(ItemPair<TKey1, TKey2> item)
         {
-            if (item == null) throw new ArgumentNullException("item");
+            if (item == null)
+            {
+                throw new ArgumentNullException("item");
+            }
+
             Add(item.A, item.B);
         }
 
@@ -396,7 +349,11 @@ namespace Cave.Collections.Generic
         /// <returns></returns>
         public bool Contains(ItemPair<TKey1, TKey2> item)
         {
-            if (item == null) throw new ArgumentNullException("item");
+            if (item == null)
+            {
+                throw new ArgumentNullException("item");
+            }
+
             return Contains(item.A, item.B);
         }
 
@@ -428,7 +385,11 @@ namespace Cave.Collections.Generic
         /// <returns></returns>
         public bool Remove(ItemPair<TKey1, TKey2> item)
         {
-            if (item == null) throw new ArgumentNullException("item");
+            if (item == null)
+            {
+                throw new ArgumentNullException("item");
+            }
+
             try
             {
                 m_LookupA.Remove(item.A);

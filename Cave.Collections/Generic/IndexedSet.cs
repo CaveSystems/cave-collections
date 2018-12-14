@@ -1,50 +1,3 @@
-#region CopyRight 2018
-/*
-    Copyright (c) 2003-2018 Andreas Rohleder (andreas@rohleder.cc)
-    All rights reserved
-*/
-#endregion
-#region License LGPL-3
-/*
-    This program/library/sourcecode is free software; you can redistribute it
-    and/or modify it under the terms of the GNU Lesser General Public License
-    version 3 as published by the Free Software Foundation subsequent called
-    the License.
-
-    You may not use this program/library/sourcecode except in compliance
-    with the License. The License is included in the LICENSE file
-    found at the installation directory or the distribution package.
-
-    Permission is hereby granted, free of charge, to any person obtaining
-    a copy of this software and associated documentation files (the
-    "Software"), to deal in the Software without restriction, including
-    without limitation the rights to use, copy, modify, merge, publish,
-    distribute, sublicense, and/or sell copies of the Software, and to
-    permit persons to whom the Software is furnished to do so, subject to
-    the following conditions:
-
-    The above copyright notice and this permission notice shall be included
-    in all copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-    LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-#endregion
-#region Authors & Contributors
-/*
-   Author:
-     Andreas Rohleder <andreas@rohleder.cc>
-
-   Contributors:
-
- */
-#endregion
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -113,8 +66,16 @@ namespace Cave.Collections.Generic
         /// <returns></returns>
         public static bool operator ==(IndexedSet<T> set1, IndexedSet<T> set2)
         {
-            if (ReferenceEquals(set1, null)) return (ReferenceEquals(set2, null));
-            if (ReferenceEquals(set2, null)) return false;
+            if (ReferenceEquals(set1, null))
+            {
+                return (ReferenceEquals(set2, null));
+            }
+
+            if (ReferenceEquals(set2, null))
+            {
+                return false;
+            }
+
             return set1.Equals(set2);
         }
 
@@ -140,15 +101,30 @@ namespace Cave.Collections.Generic
         /// <returns>Returns a new <see cref="Set{T}"/> containing the result.</returns>
         public static IndexedSet<T> BitwiseOr(IndexedSet<T> set1, IndexedSet<T> set2)
         {
-            if (set1 == null) throw new ArgumentNullException("set1");
-            if (set2 == null) throw new ArgumentNullException("set2");
-            if (set1.Count < set2.Count) return BitwiseOr(set2, set1);
+            if (set1 == null)
+            {
+                throw new ArgumentNullException("set1");
+            }
+
+            if (set2 == null)
+            {
+                throw new ArgumentNullException("set2");
+            }
+
+            if (set1.Count < set2.Count)
+            {
+                return BitwiseOr(set2, set1);
+            }
 
             IndexedSet<T> result = new IndexedSet<T>();
             result.AddRange(set2);
             foreach (T item in set1)
             {
-                if (set2.Contains(item)) continue;
+                if (set2.Contains(item))
+                {
+                    continue;
+                }
+
                 result.Add(item);
             }
             return result;
@@ -162,14 +138,28 @@ namespace Cave.Collections.Generic
         /// <returns>Returns a new <see cref="Set{T}"/> containing the result.</returns>
         public static IndexedSet<T> BitwiseAnd(IndexedSet<T> set1, IndexedSet<T> set2)
         {
-            if (set1 == null) throw new ArgumentNullException("set1");
-            if (set2 == null) throw new ArgumentNullException("set2");
-            if (set1.Count < set2.Count) return BitwiseAnd(set2, set1);
+            if (set1 == null)
+            {
+                throw new ArgumentNullException("set1");
+            }
+
+            if (set2 == null)
+            {
+                throw new ArgumentNullException("set2");
+            }
+
+            if (set1.Count < set2.Count)
+            {
+                return BitwiseAnd(set2, set1);
+            }
 
             IndexedSet<T> result = new IndexedSet<T>();
             foreach (T itemsItem in set1)
             {
-                if (set2.Contains(itemsItem)) result.Add(itemsItem);
+                if (set2.Contains(itemsItem))
+                {
+                    result.Add(itemsItem);
+                }
             }
             return result;
         }
@@ -182,8 +172,16 @@ namespace Cave.Collections.Generic
         /// <returns>Returns a new <see cref="Set{T}"/> containing the result.</returns>
         public static IndexedSet<T> Subtract(IndexedSet<T> set1, IndexedSet<T> set2)
         {
-            if (set1 == null) throw new ArgumentNullException("set1");
-            if (set2 == null) throw new ArgumentNullException("set2");
+            if (set1 == null)
+            {
+                throw new ArgumentNullException("set1");
+            }
+
+            if (set2 == null)
+            {
+                throw new ArgumentNullException("set2");
+            }
+
             IndexedSet<T> result = new IndexedSet<T>();
             foreach (T setItem in set1)
             {
@@ -203,9 +201,20 @@ namespace Cave.Collections.Generic
         /// <returns>Returns a new <see cref="Set{T}"/> containing the result.</returns>
         public static IndexedSet<T> Xor(IndexedSet<T> set1, IndexedSet<T> set2)
         {
-            if (set1 == null) throw new ArgumentNullException("set1");
-            if (set2 == null) throw new ArgumentNullException("set2");
-            if (set1.Count < set2.Count) return Xor(set2, set1);
+            if (set1 == null)
+            {
+                throw new ArgumentNullException("set1");
+            }
+
+            if (set2 == null)
+            {
+                throw new ArgumentNullException("set2");
+            }
+
+            if (set1.Count < set2.Count)
+            {
+                return Xor(set2, set1);
+            }
 
             LinkedList<T> newSet2 = new LinkedList<T>(set2);
             IndexedSet<T> result = new IndexedSet<T>();
@@ -328,7 +337,11 @@ namespace Cave.Collections.Generic
         /// </summary>
         public bool ContainsRange(ICollection<T> collection)
         {
-            if (collection == null) throw new ArgumentNullException("collection");
+            if (collection == null)
+            {
+                throw new ArgumentNullException("collection");
+            }
+
             bool allFound = true;
             foreach (T obj in collection)
             {
@@ -340,10 +353,7 @@ namespace Cave.Collections.Generic
         /// <summary>
         /// Returns true if the set was empty
         /// </summary>
-        public bool IsEmpty
-        {
-            get { return m_Items.Count == 0; }
-        }
+        public bool IsEmpty => m_Items.Count == 0;
 
         /// <summary>
         /// Adds a specified object to the set
@@ -351,7 +361,11 @@ namespace Cave.Collections.Generic
         /// <param name="item">The item to be added to the set</param>
         public void Add(T item)
         {
-            if (item == null) throw new ArgumentNullException("item");
+            if (item == null)
+            {
+                throw new ArgumentNullException("item");
+            }
+
             int index = m_Items.Count;
             m_Items.Add(item);
             m_Lookup.Add(item, index);
@@ -363,7 +377,11 @@ namespace Cave.Collections.Generic
         /// <param name="items">The objects to be added to the list</param>
         public void AddRange(IEnumerable<T> items)
         {
-            if (items == null) throw new ArgumentNullException("items");
+            if (items == null)
+            {
+                throw new ArgumentNullException("items");
+            }
+
             foreach (T obj in items) { Add(obj); }
         }
 
@@ -373,7 +391,10 @@ namespace Cave.Collections.Generic
         /// <param name="obj">The object to be included</param>
         public void Include(T obj)
         {
-            if (!Contains(obj)) Add(obj);
+            if (!Contains(obj))
+            {
+                Add(obj);
+            }
         }
 
         /// <summary>
@@ -382,7 +403,10 @@ namespace Cave.Collections.Generic
         /// <param name="items">The objects to be included</param>
         public void IncludeRange(ICollection<T> items)
         {
-            if (items == null) throw new ArgumentNullException("items");
+            if (items == null)
+            {
+                throw new ArgumentNullException("items");
+            }
 
             foreach (T obj in items) { Include(obj); }
         }
@@ -390,7 +414,7 @@ namespace Cave.Collections.Generic
         void RebuildIndex()
         {
             m_Lookup.Clear();
-            for(int i = 0; i < m_Items.Count; i++)
+            for (int i = 0; i < m_Items.Count; i++)
             {
                 m_Lookup.Add(m_Items[i], i);
             }
@@ -411,7 +435,10 @@ namespace Cave.Collections.Generic
         /// </summary>
         public void RemoveRange(ICollection<T> collection)
         {
-            if (collection == null) throw new ArgumentNullException("collection");
+            if (collection == null)
+            {
+                throw new ArgumentNullException("collection");
+            }
 
             foreach (T obj in collection) { Remove(obj); }
         }
@@ -427,7 +454,7 @@ namespace Cave.Collections.Generic
         #endregion
 
         #region IList<T> member
-        
+
         /// <summary>
         /// Returns the zero-based index of the first occurrence of a value in the set.
         /// </summary>
@@ -445,7 +472,11 @@ namespace Cave.Collections.Generic
         /// <param name="item">The object to insert.</param>
         public void Insert(int index, T item)
         {
-            if (index < 0 || index > m_Items.Count) throw new IndexOutOfRangeException();
+            if (index < 0 || index > m_Items.Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             m_Lookup.Add(item, index);
             m_Items.Insert(index, item);
             for (int i = index + 1; i < m_Items.Count; i++)
@@ -460,12 +491,20 @@ namespace Cave.Collections.Generic
         /// <param name="index">The zero-based index of the element to remove.</param>
         public void RemoveAt(int index)
         {
-            if (index < 0 || index > m_Items.Count) throw new IndexOutOfRangeException();
+            if (index < 0 || index > m_Items.Count)
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             for (int i = index + 1; i < m_Items.Count; i++)
             {
                 m_Lookup[m_Items[i]] = i - 1;
             }
-            if (!m_Lookup.Remove(m_Items[index])) throw new IndexOutOfRangeException();
+            if (!m_Lookup.Remove(m_Items[index]))
+            {
+                throw new IndexOutOfRangeException();
+            }
+
             m_Items.RemoveAt(index);
         }
 
@@ -476,14 +515,15 @@ namespace Cave.Collections.Generic
         /// <returns></returns>
         public T this[int index]
         {
-            get
-            {
-                return m_Items[index];
-            }
+            get => m_Items[index];
             set
             {
                 T oldKey = m_Items[index];
-                if (!m_Lookup.Remove(oldKey)) throw new KeyNotFoundException();
+                if (!m_Lookup.Remove(oldKey))
+                {
+                    throw new KeyNotFoundException();
+                }
+
                 m_Lookup.Add(value, index);
                 m_Items[index] = value;
             }
@@ -505,10 +545,7 @@ namespace Cave.Collections.Generic
         /// <summary>
         /// Obtains the number of objects present at the set
         /// </summary>
-        public int Count
-        {
-            get { return m_Items.Count; }
-        }
+        public int Count => m_Items.Count;
 
         #endregion
 
@@ -541,10 +578,7 @@ namespace Cave.Collections.Generic
         /// <summary>
         /// Returns false
         /// </summary>
-        public bool IsReadOnly
-        {
-            get { return false; }
-        }
+        public bool IsReadOnly => false;
 
         #endregion
 
@@ -577,7 +611,11 @@ namespace Cave.Collections.Generic
         public override bool Equals(object obj)
         {
             IndexedSet<T> other = obj as IndexedSet<T>;
-            if (null == other) return false;
+            if (null == other)
+            {
+                return false;
+            }
+
             return Equals(other);
         }
 
@@ -588,8 +626,16 @@ namespace Cave.Collections.Generic
         /// <returns></returns>
         public bool Equals(IndexedSet<T> other)
         {
-            if (other == null) return false;
-            if (other.Count != Count) return false;
+            if (other == null)
+            {
+                return false;
+            }
+
+            if (other.Count != Count)
+            {
+                return false;
+            }
+
             return ContainsRange(other);
         }
 

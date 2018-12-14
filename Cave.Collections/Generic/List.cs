@@ -1,54 +1,7 @@
-#region CopyRight 2018
-/*
-    Copyright (c) 2003-2018 Andreas Rohleder (andreas@rohleder.cc)
-    All rights reserved
-*/
-#endregion
-#region License LGPL-3
-/*
-    This program/library/sourcecode is free software; you can redistribute it
-    and/or modify it under the terms of the GNU Lesser General Public License
-    version 3 as published by the Free Software Foundation subsequent called
-    the License.
-
-    You may not use this program/library/sourcecode except in compliance
-    with the License. The License is included in the LICENSE file
-    found at the installation directory or the distribution package.
-
-    Permission is hereby granted, free of charge, to any person obtaining
-    a copy of this software and associated documentation files (the
-    "Software"), to deal in the Software without restriction, including
-    without limitation the rights to use, copy, modify, merge, publish,
-    distribute, sublicense, and/or sell copies of the Software, and to
-    permit persons to whom the Software is furnished to do so, subject to
-    the following conditions:
-
-    The above copyright notice and this permission notice shall be included
-    in all copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-    LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-#endregion
-#region Authors & Contributors
-/*
-   Author:
-     Andreas Rohleder <andreas@rohleder.cc>
-
-   Contributors:
-
- */
-#endregion
-
 using System;
-using System.Data;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 
 namespace Cave.Collections.Generic
@@ -59,7 +12,7 @@ namespace Cave.Collections.Generic
     /// <typeparam name="TValue1">The type of the first object</typeparam>
     /// <typeparam name="TValue2">The type of the second object</typeparam>
     [DebuggerDisplay("Count={Count}")]
-    public class List<TValue1, TValue2> : IList<ItemPair<TValue1, TValue2>> 
+    public class List<TValue1, TValue2> : IList<ItemPair<TValue1, TValue2>>
     {
         List<TValue1> m_ListA;
         List<TValue2> m_ListB;
@@ -103,7 +56,11 @@ namespace Cave.Collections.Generic
         /// <param name="items"></param>
         public void AddRange(IEnumerable<ItemPair<TValue1, TValue2>> items)
         {
-            if (items == null) throw new ArgumentNullException("items");
+            if (items == null)
+            {
+                throw new ArgumentNullException("items");
+            }
+
             foreach (ItemPair<TValue1, TValue2> item in items)
             {
                 Add(item);
@@ -125,7 +82,11 @@ namespace Cave.Collections.Generic
         /// <param name="value2">B item to add</param>
         public void Add(TValue1 value1, TValue2 value2)
         {
-            if (m_ReadOnly) throw new ReadOnlyException();
+            if (m_ReadOnly)
+            {
+                throw new ReadOnlyException();
+            }
+
             Add(new ItemPair<TValue1, TValue2>(value1, value2));
         }
 
@@ -137,7 +98,11 @@ namespace Cave.Collections.Generic
         /// <param name="value2">B item to add</param>
         public void Insert(int index, TValue1 value1, TValue2 value2)
         {
-            if (m_ReadOnly) throw new ReadOnlyException();
+            if (m_ReadOnly)
+            {
+                throw new ReadOnlyException();
+            }
+
             Insert(index, new ItemPair<TValue1, TValue2>(value1, value2));
         }
 
@@ -149,7 +114,11 @@ namespace Cave.Collections.Generic
         public TValue2 Find(TValue1 value)
         {
             int index = IndexOfA(value);
-            if (index < 0) throw new ArgumentOutOfRangeException(nameof(value));
+            if (index < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value));
+            }
+
             return m_ListB[index];
         }
 
@@ -160,14 +129,19 @@ namespace Cave.Collections.Generic
         /// <returns></returns>
         public ItemPair<TValue1, TValue2> this[int index]
         {
-            get
-            {
-                return new ItemPair<TValue1, TValue2>(m_ListA[index], m_ListB[index]);
-            }
+            get => new ItemPair<TValue1, TValue2>(m_ListA[index], m_ListB[index]);
             set
             {
-                if (value == null) throw new ArgumentNullException("value");
-                if (m_ReadOnly) throw new ReadOnlyException();
+                if (value == null)
+                {
+                    throw new ArgumentNullException("value");
+                }
+
+                if (m_ReadOnly)
+                {
+                    throw new ReadOnlyException();
+                }
+
                 m_ListA[index] = value.A;
                 m_ListB[index] = value.B;
             }
@@ -192,7 +166,11 @@ namespace Cave.Collections.Generic
         /// <param name="index"></param>
         public void RemoveAt(int index)
         {
-            if (m_ReadOnly) throw new ReadOnlyException();
+            if (m_ReadOnly)
+            {
+                throw new ReadOnlyException();
+            }
+
             m_ListA.RemoveAt(index);
             m_ListB.RemoveAt(index);
         }
@@ -202,7 +180,11 @@ namespace Cave.Collections.Generic
         /// </summary>
         public void Clear()
         {
-            if (m_ReadOnly) throw new ReadOnlyException();
+            if (m_ReadOnly)
+            {
+                throw new ReadOnlyException();
+            }
+
             m_ListA.Clear();
             m_ListB.Clear();
         }
@@ -210,18 +192,12 @@ namespace Cave.Collections.Generic
         /// <summary>
         /// Obtains the number of items present
         /// </summary>
-        public int Count
-        {
-            get { return m_ListA.Count; }
-        }
+        public int Count => m_ListA.Count;
 
         /// <summary>
         /// Obtains whether the list is readonly or not
         /// </summary>
-        public bool IsReadOnly
-        {
-            get { return m_ReadOnly; }
-        }
+        public bool IsReadOnly => m_ReadOnly;
 
         #endregion
 
@@ -295,7 +271,11 @@ namespace Cave.Collections.Generic
         public bool Remove(TValue1 A)
         {
             int index = IndexOfA(A);
-            if (index < 0) return false;
+            if (index < 0)
+            {
+                return false;
+            }
+
             RemoveAt(index);
             return true;
         }
@@ -303,13 +283,7 @@ namespace Cave.Collections.Generic
         /// <summary>
         /// Obtains all A items present
         /// </summary>
-        public TValue1[] ItemsA
-        {
-            get
-            {
-                return m_ListA.ToArray();
-            }
-        }
+        public TValue1[] ItemsA => m_ListA.ToArray();
 
         #endregion
 
@@ -384,7 +358,11 @@ namespace Cave.Collections.Generic
         public bool Remove(TValue2 B)
         {
             int index = IndexOfB(B);
-            if (index < 0) return false;
+            if (index < 0)
+            {
+                return false;
+            }
+
             RemoveAt(index);
             return true;
         }
@@ -392,13 +370,7 @@ namespace Cave.Collections.Generic
         /// <summary>
         /// Obtains all B items present
         /// </summary>
-        public TValue2[] ItemsB
-        {
-            get
-            {
-                return m_ListB.ToArray();
-            }
-        }
+        public TValue2[] ItemsB => m_ListB.ToArray();
 
         /// <summary>
         /// Gets/sets a B item at the first found A item
@@ -408,7 +380,11 @@ namespace Cave.Collections.Generic
         public TValue1 Find(TValue2 value2)
         {
             int index = IndexOfB(value2);
-            if (index < 0) throw new ArgumentOutOfRangeException(nameof(value2));
+            if (index < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(value2));
+            }
+
             return m_ListA[index];
         }
 
@@ -422,11 +398,19 @@ namespace Cave.Collections.Generic
         /// <returns>Returns the index or -1</returns>
         public int IndexOf(ItemPair<TValue1, TValue2> item)
         {
-            if (item == null) throw new ArgumentNullException("item");
+            if (item == null)
+            {
+                throw new ArgumentNullException("item");
+            }
+
             int index = m_ListA.IndexOf(item.A);
             while (index > -1)
             {
-                if (Equals(m_ListB[index], item.B)) break;
+                if (Equals(m_ListB[index], item.B))
+                {
+                    break;
+                }
+
                 index = m_ListA.IndexOf(item.A, index);
             }
             return index;
@@ -439,7 +423,11 @@ namespace Cave.Collections.Generic
         /// <param name="item">The ItemPair to insert</param>
         public void Insert(int index, ItemPair<TValue1, TValue2> item)
         {
-            if (item == null) throw new ArgumentNullException("item");
+            if (item == null)
+            {
+                throw new ArgumentNullException("item");
+            }
+
             m_ListA.Insert(index, item.A);
             m_ListB.Insert(index, item.B);
         }
@@ -450,7 +438,11 @@ namespace Cave.Collections.Generic
         /// <param name="item">The ItemPair to add</param>
         public void Add(ItemPair<TValue1, TValue2> item)
         {
-            if (item == null) throw new ArgumentNullException("item");
+            if (item == null)
+            {
+                throw new ArgumentNullException("item");
+            }
+
             m_ListA.Add(item.A);
             m_ListB.Add(item.B);
         }
@@ -472,7 +464,11 @@ namespace Cave.Collections.Generic
         /// <param name="arrayIndex">The index to start writing at</param>
         public void CopyTo(ItemPair<TValue1, TValue2>[] array, int arrayIndex)
         {
-            if (array == null) throw new ArgumentNullException("array");
+            if (array == null)
+            {
+                throw new ArgumentNullException("array");
+            }
+
             for (int i = 0; i < Count; i++)
             {
                 array[arrayIndex++] = this[i];
@@ -487,7 +483,11 @@ namespace Cave.Collections.Generic
         public bool Remove(ItemPair<TValue1, TValue2> item)
         {
             int index = IndexOf(item);
-            if (index < 0) return false;
+            if (index < 0)
+            {
+                return false;
+            }
+
             RemoveAt(index);
             return true;
         }

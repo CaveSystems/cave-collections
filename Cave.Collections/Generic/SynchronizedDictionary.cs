@@ -1,50 +1,4 @@
-﻿#region CopyRight 2018
-/*
-    Copyright (c) 2003-2018 Andreas Rohleder (andreas@rohleder.cc)
-    All rights reserved
-*/
-#endregion
-#region License LGPL-3
-/*
-    This program/library/sourcecode is free software; you can redistribute it
-    and/or modify it under the terms of the GNU Lesser General Public License
-    version 3 as published by the Free Software Foundation subsequent called
-    the License.
-
-    You may not use this program/library/sourcecode except in compliance
-    with the License. The License is included in the LICENSE file
-    found at the installation directory or the distribution package.
-
-    Permission is hereby granted, free of charge, to any person obtaining
-    a copy of this software and associated documentation files (the
-    "Software"), to deal in the Software without restriction, including
-    without limitation the rights to use, copy, modify, merge, publish,
-    distribute, sublicense, and/or sell copies of the Software, and to
-    permit persons to whom the Software is furnished to do so, subject to
-    the following conditions:
-
-    The above copyright notice and this permission notice shall be included
-    in all copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-    LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-#endregion
-#region Authors & Contributors
-/*
-   Author:
-     Andreas Rohleder <andreas@rohleder.cc>
-
-   Contributors:
- */
-#endregion
-
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -72,27 +26,27 @@ namespace Cave.Collections.Generic
         /// <value>The value.</value>
         /// <param name="key">The key.</param>
         /// <returns></returns>
-        public TValue this[TKey key] { get { lock (this) return dict[key]; } set { lock (this) dict[key] = value; } }
+        public TValue this[TKey key] { get { lock (this) { return dict[key]; } } set { lock (this) { dict[key] = value; } } }
 
         /// <summary>
         /// Ruft die Anzahl der Elemente ab, die in <see cref="T:System.Collections.Generic.ICollection`1" /> enthalten sind.
         /// </summary>
-        public int Count { get { lock (this) return dict.Count; } }
+        public int Count { get { lock (this) { return dict.Count; } } }
 
         /// <summary>
         /// Ruft einen Wert ab, der angibt, ob <see cref="T:System.Collections.Generic.ICollection`1" /> schreibgeschützt ist.
         /// </summary>
-        public bool IsReadOnly { get { lock (this) return dict.IsReadOnly; } }
+        public bool IsReadOnly { get { lock (this) { return dict.IsReadOnly; } } }
 
         /// <summary>
         /// Ruft eine <see cref="T:System.Collections.Generic.ICollection`1" />-Schnittstelle ab, die die Schlüssel von <see cref="T:System.Collections.Generic.IDictionary`2" /> enthält.
         /// </summary>
-        public ICollection<TKey> Keys { get { lock (this) return dict.Keys.ToArray(); } }
+        public ICollection<TKey> Keys { get { lock (this) { return dict.Keys.ToArray(); } } }
 
         /// <summary>
         /// Ruft eine <see cref="T:System.Collections.Generic.ICollection`1" /> ab, die die Werte in <see cref="T:System.Collections.Generic.IDictionary`2" /> enthält.
         /// </summary>
-        public ICollection<TValue> Values { get { lock (this) return dict.Values.ToArray(); } }
+        public ICollection<TValue> Values { get { lock (this) { return dict.Values.ToArray(); } } }
 
         /// <summary>Tries to add a new item to the dictionary.</summary>
         /// <param name="key">The key.</param>
@@ -102,7 +56,11 @@ namespace Cave.Collections.Generic
         {
             lock (this)
             {
-                if (dict.ContainsKey(key)) return false;
+                if (dict.ContainsKey(key))
+                {
+                    return false;
+                }
+
                 dict[key] = constructor();
             }
             return true;
@@ -116,7 +74,11 @@ namespace Cave.Collections.Generic
         {
             lock (this)
             {
-                if (dict.ContainsKey(key)) return false;
+                if (dict.ContainsKey(key))
+                {
+                    return false;
+                }
+
                 dict[key] = value;
             }
             return true;
@@ -126,7 +88,10 @@ namespace Cave.Collections.Generic
         /// <param name="item">Das Objekt, das <see cref="T:System.Collections.Generic.ICollection`1" /> hinzugefügt werden soll.</param>
         public void Add(KeyValuePair<TKey, TValue> item)
         {
-            lock (this) dict.Add(item);
+            lock (this)
+            {
+                dict.Add(item);
+            }
         }
 
         /// <summary>
@@ -136,13 +101,19 @@ namespace Cave.Collections.Generic
         /// <param name="value">Das Objekt, das als Wert für das hinzuzufügende Element verwendet werden soll.</param>
         public void Add(TKey key, TValue value)
         {
-            lock (this) dict.Add(key, value);
+            lock (this)
+            {
+                dict.Add(key, value);
+            }
         }
 
         /// <summary>Entfernt alle Elemente aus <see cref="T:System.Collections.Generic.ICollection`1" />.</summary>
         public void Clear()
         {
-            lock (this) dict.Clear();
+            lock (this)
+            {
+                dict.Clear();
+            }
         }
 
         /// <summary>Bestimmt, ob <see cref="T:System.Collections.Generic.ICollection`1" /> einen bestimmten Wert enthält.</summary>
@@ -152,7 +123,10 @@ namespace Cave.Collections.Generic
         /// </returns>
         public bool Contains(KeyValuePair<TKey, TValue> item)
         {
-            lock (this) return dict.Contains(item);
+            lock (this)
+            {
+                return dict.Contains(item);
+            }
         }
 
         /// <summary>
@@ -164,7 +138,10 @@ namespace Cave.Collections.Generic
         /// </returns>
         public bool ContainsKey(TKey key)
         {
-            lock (this) return dict.ContainsKey(key);
+            lock (this)
+            {
+                return dict.ContainsKey(key);
+            }
         }
 
         /// <summary>
@@ -174,7 +151,10 @@ namespace Cave.Collections.Generic
         /// <param name="arrayIndex">Der nullbasierte Index in <paramref name="array" />, an dem das Kopieren beginnt.</param>
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
-            lock (this) dict.CopyTo(array, arrayIndex);
+            lock (this)
+            {
+                dict.CopyTo(array, arrayIndex);
+            }
         }
 
         /// <summary>
@@ -186,7 +166,10 @@ namespace Cave.Collections.Generic
         /// </returns>
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
-            lock (this) return dict.Remove(item);
+            lock (this)
+            {
+                return dict.Remove(item);
+            }
         }
 
         /// <summary>
@@ -198,7 +181,10 @@ namespace Cave.Collections.Generic
         /// </returns>
         public bool Remove(TKey key)
         {
-            lock (this) return dict.Remove(key);
+            lock (this)
+            {
+                return dict.Remove(key);
+            }
         }
 
         /// <summary>Tries to remove the specified key.</summary>
@@ -218,33 +204,36 @@ namespace Cave.Collections.Generic
             return removed;
         }
 
-		/// <summary>Tries to remove the specified key.</summary>
-		/// <param name="key">The key.</param>
-		/// <param name="value">The value.</param>
-		/// <returns>Returns true on successful remove or false otherwise</returns>
-		public bool TryRemove(TKey key, out TValue value)
-		{
-			bool removed = false;
-			lock (this)
-			{
-				if (dict.TryGetValue(key, out value))
-				{
-					dict.Remove(key);
-					removed = true;
-				}
-			}
-			return removed;
-		}
-
-		/// <summary>Ruft den dem angegebenen Schlüssel zugeordneten Wert ab.</summary>
-		/// <param name="key">Der Schlüssel, dessen Wert abgerufen werden soll.</param>
-		/// <param name="value">Wenn diese Methode zurückgegeben wird, enthält sie den dem angegebenen Schlüssel zugeordneten Wert, wenn der Schlüssel gefunden wird, andernfalls enthält sie den Standardwert für den Typ des <paramref name="value" />-Parameters.Dieser Parameter wird nicht initialisiert übergeben.</param>
-		/// <returns>
-		/// true, wenn das Objekt, das <see cref="T:System.Collections.Generic.IDictionary`2" /> implementiert, ein Element mit dem angegebenen Schlüssel enthält, andernfalls false.
-		/// </returns>
-		public bool TryGetValue(TKey key, out TValue value)
+        /// <summary>Tries to remove the specified key.</summary>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The value.</param>
+        /// <returns>Returns true on successful remove or false otherwise</returns>
+        public bool TryRemove(TKey key, out TValue value)
         {
-            lock (this) return dict.TryGetValue(key, out value);
+            bool removed = false;
+            lock (this)
+            {
+                if (dict.TryGetValue(key, out value))
+                {
+                    dict.Remove(key);
+                    removed = true;
+                }
+            }
+            return removed;
+        }
+
+        /// <summary>Ruft den dem angegebenen Schlüssel zugeordneten Wert ab.</summary>
+        /// <param name="key">Der Schlüssel, dessen Wert abgerufen werden soll.</param>
+        /// <param name="value">Wenn diese Methode zurückgegeben wird, enthält sie den dem angegebenen Schlüssel zugeordneten Wert, wenn der Schlüssel gefunden wird, andernfalls enthält sie den Standardwert für den Typ des <paramref name="value" />-Parameters.Dieser Parameter wird nicht initialisiert übergeben.</param>
+        /// <returns>
+        /// true, wenn das Objekt, das <see cref="T:System.Collections.Generic.IDictionary`2" /> implementiert, ein Element mit dem angegebenen Schlüssel enthält, andernfalls false.
+        /// </returns>
+        public bool TryGetValue(TKey key, out TValue value)
+        {
+            lock (this)
+            {
+                return dict.TryGetValue(key, out value);
+            }
         }
 
         /// <summary>Adds a key/value pair to the Dictionary by using the specified function, if the key does not already exist.</summary>
@@ -255,8 +244,7 @@ namespace Cave.Collections.Generic
         {
             lock (this)
             {
-                TValue result;
-                if (!dict.TryGetValue(key, out result))
+                if (!dict.TryGetValue(key, out TValue result))
                 {
                     result = constructor();
                     dict[key] = result;
@@ -274,11 +262,13 @@ namespace Cave.Collections.Generic
         {
             lock (this)
             {
-                TValue result;
-                if (!dict.TryGetValue(key, out result))
+                if (!dict.TryGetValue(key, out TValue result))
                 {
                     result = constructor();
-                    if (result != null) dict[key] = result;
+                    if (result != null)
+                    {
+                        dict[key] = result;
+                    }
                 }
                 return result;
             }
@@ -290,7 +280,7 @@ namespace Cave.Collections.Generic
         {
             lock (this)
             {
-                foreach (var item in items)
+                foreach (KeyValuePair<TKey, TValue> item in items)
                 {
                     dict.Add(item);
                 }
@@ -303,7 +293,7 @@ namespace Cave.Collections.Generic
         {
             lock (this)
             {
-                foreach (var item in items)
+                foreach (KeyValuePair<TKey, TValue> item in items)
                 {
                     dict[item.Key] = item.Value;
                 }

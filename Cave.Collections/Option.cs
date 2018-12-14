@@ -1,52 +1,3 @@
-#region CopyRight 2018
-/*
-    Copyright (c) 2003-2018 Andreas Rohleder (andreas@rohleder.cc)
-    All rights reserved
-*/
-#endregion
-#region License LGPL-3
-/*
-    This program/library/sourcecode is free software; you can redistribute it
-    and/or modify it under the terms of the GNU Lesser General Public License
-    version 3 as published by the Free Software Foundation subsequent called
-    the License.
-
-    You may not use this program/library/sourcecode except in compliance
-    with the License. The License is included in the LICENSE file
-    found at the installation directory or the distribution package.
-
-    Permission is hereby granted, free of charge, to any person obtaining
-    a copy of this software and associated documentation files (the
-    "Software"), to deal in the Software without restriction, including
-    without limitation the rights to use, copy, modify, merge, publish,
-    distribute, sublicense, and/or sell copies of the Software, and to
-    permit persons to whom the Software is furnished to do so, subject to
-    the following conditions:
-
-    The above copyright notice and this permission notice shall be included
-    in all copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-    LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-#endregion
-#region Authors & Contributors
-/*
-   Author:
-     Andreas Rohleder <andreas@rohleder.cc>
-
-   Contributors:
-
- */
-#endregion
-
-using Cave;
-using Cave.Text;
 using System;
 using System.Collections;
 using System.Text;
@@ -76,7 +27,11 @@ namespace Cave.Collections
         {
             option = option.UnboxText(false);
             string optionID = GetPrefix(option);
-            if (optionID == null) return option;
+            if (optionID == null)
+            {
+                return option;
+            }
+
             return option.Substring(optionID.Length);
         }
 
@@ -87,10 +42,22 @@ namespace Cave.Collections
         /// <returns></returns>
         public static string GetPrefix(string option)
         {
-            if (string.IsNullOrEmpty(option)) return null;
+            if (string.IsNullOrEmpty(option))
+            {
+                return null;
+            }
+
             string result = option.UnboxText(false);
-            if (result.StartsWith("--")) return "--";
-            if (result[0] == '-') return "-";
+            if (result.StartsWith("--"))
+            {
+                return "--";
+            }
+
+            if (result[0] == '-')
+            {
+                return "-";
+            }
+
             return null;
         }
 
@@ -120,7 +87,10 @@ namespace Cave.Collections
         /// <returns></returns>
         public static bool IsOption(string option, bool allowMissingPrefix)
         {
-            if (string.IsNullOrEmpty(option)) return false;
+            if (string.IsNullOrEmpty(option))
+            {
+                return false;
+            }
 
             //default option
             if (option[0] == '-')
@@ -158,8 +128,16 @@ namespace Cave.Collections
         /// <exception cref="ArgumentOutOfRangeException">OptionString</exception>
         public static Option Parse(string option, string separator)
         {
-            if (option == null) throw new ArgumentNullException("option");
-            if (option.IndexOfAny(new char[] { '\r', '\n' }) > -1) throw new ArgumentOutOfRangeException(nameof(option));
+            if (option == null)
+            {
+                throw new ArgumentNullException("option");
+            }
+
+            if (option.IndexOfAny(new char[] { '\r', '\n' }) > -1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(option));
+            }
+
             int index = option.IndexOf(separator);
             string prefix;
             string name;
@@ -222,11 +200,31 @@ namespace Cave.Collections
         /// </exception>
         public Option(string prefix, string name, string separator, string value)
         {
-            if (name == null) throw new ArgumentNullException("name");
-            if (separator == null) throw new ArgumentNullException("separator");
-            if (!string.IsNullOrEmpty(prefix) && name.StartsWith(prefix)) throw new ArgumentException("Do not prefix the optionname with an option prefix!");
-            if (name.IndexOf(separator) > -1) throw new ArgumentException("Option name may not contain the separator!");
-            if (name.StartsWith("-")) throw new ArgumentException("Option name contains prefix!");
+            if (name == null)
+            {
+                throw new ArgumentNullException("name");
+            }
+
+            if (separator == null)
+            {
+                throw new ArgumentNullException("separator");
+            }
+
+            if (!string.IsNullOrEmpty(prefix) && name.StartsWith(prefix))
+            {
+                throw new ArgumentException("Do not prefix the optionname with an option prefix!");
+            }
+
+            if (name.IndexOf(separator) > -1)
+            {
+                throw new ArgumentException("Option name may not contain the separator!");
+            }
+
+            if (name.StartsWith("-"))
+            {
+                throw new ArgumentException("Option name contains prefix!");
+            }
+
             Prefix = prefix;
             Name = name;
             Separator = separator;
@@ -299,7 +297,11 @@ namespace Cave.Collections
         /// <returns></returns>
         public bool Equals(Option other)
         {
-            if (ReferenceEquals(other, null)) return false;
+            if (ReferenceEquals(other, null))
+            {
+                return false;
+            }
+
             return (other.Name == Name) && (other.Value == Value) && (other.Separator == Separator);
         }
         #endregion

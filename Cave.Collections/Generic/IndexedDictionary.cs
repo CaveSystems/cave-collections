@@ -1,49 +1,3 @@
-#region CopyRight 2018
-/*
-    Copyright (c) 2003-2018 Andreas Rohleder (andreas@rohleder.cc)
-    All rights reserved
-*/
-#endregion
-#region License LGPL-3
-/*
-    This program/library/sourcecode is free software; you can redistribute it
-    and/or modify it under the terms of the GNU Lesser General Public License
-    version 3 as published by the Free Software Foundation subsequent called
-    the License.
-
-    You may not use this program/library/sourcecode except in compliance
-    with the License. The License is included in the LICENSE file
-    found at the installation directory or the distribution package.
-
-    Permission is hereby granted, free of charge, to any person obtaining
-    a copy of this software and associated documentation files (the
-    "Software"), to deal in the Software without restriction, including
-    without limitation the rights to use, copy, modify, merge, publish,
-    distribute, sublicense, and/or sell copies of the Software, and to
-    permit persons to whom the Software is furnished to do so, subject to
-    the following conditions:
-
-    The above copyright notice and this permission notice shall be included
-    in all copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-    LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-#endregion
-#region Authors & Contributors
-/*
-   Author:
-     Andreas Rohleder <andreas@rohleder.cc>
-
-   Contributors:
- */
-#endregion Authors & Contributors
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -60,26 +14,26 @@ namespace Cave.Collections.Generic
     [DebuggerDisplay("Count={Count}")]
     public class IndexedDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     {
-		Dictionary<TKey, TValue> m_Dictionary;
-		List<TKey> m_Keys;
+        Dictionary<TKey, TValue> m_Dictionary;
+        List<TKey> m_Keys;
 
-		#region IDictionary<T1, T2> implementation
+        #region IDictionary<T1, T2> implementation
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="IndexedDictionary{TKey, TValue}"/> class.
-		/// </summary>
-		public IndexedDictionary()
-		{
-			m_Dictionary = new Dictionary<TKey, TValue>(); 
-			m_Keys = new List<TKey>();
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IndexedDictionary{TKey, TValue}"/> class.
+        /// </summary>
+        public IndexedDictionary()
+        {
+            m_Dictionary = new Dictionary<TKey, TValue>();
+            m_Keys = new List<TKey>();
+        }
 
-		/// <summary>
-		/// Adds the specified key and value to the dictionary.
-		/// </summary>
-		/// <param name="key"></param>
-		/// <param name="value"></param>
-		public void Add(TKey key, TValue value)
+        /// <summary>
+        /// Adds the specified key and value to the dictionary.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public void Add(TKey key, TValue value)
         {
             m_Dictionary.Add(key, value);
             m_Keys.Add(key);
@@ -98,13 +52,7 @@ namespace Cave.Collections.Generic
         /// <summary>
         /// Gets a collection containing the keys.
         /// </summary>
-        public ICollection<TKey> Keys
-        {
-            get
-            {
-                return m_Keys.AsReadOnly();
-            }
-        }
+        public ICollection<TKey> Keys => m_Keys.AsReadOnly();
 
         /// <summary>
         /// Removes the value with the specified key.
@@ -130,13 +78,7 @@ namespace Cave.Collections.Generic
         /// <summary>
         /// Gets a collection containing the values.
         /// </summary>
-        public ICollection<TValue> Values
-        {
-            get
-            {
-                return m_Dictionary.Values;
-            }
-        }
+        public ICollection<TValue> Values => m_Dictionary.Values;
 
         /// <summary>
         /// Gets/sets the value at the specified key.
@@ -145,10 +87,7 @@ namespace Cave.Collections.Generic
         /// <returns></returns>
         public TValue this[TKey key]
         {
-            get
-            {
-                return m_Dictionary[key];
-            }
+            get => m_Dictionary[key];
             set
             {
                 if (m_Dictionary.ContainsKey(key))
@@ -186,11 +125,15 @@ namespace Cave.Collections.Generic
         /// <param name="arrayIndex"></param>
         public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
         {
-            if (array == null) throw new ArgumentNullException("array");
-            int i = arrayIndex;
-            foreach(TKey k in m_Keys)
+            if (array == null)
             {
-                array[i++] = new KeyValuePair<TKey,TValue>(k, m_Dictionary[k]);
+                throw new ArgumentNullException("array");
+            }
+
+            int i = arrayIndex;
+            foreach (TKey k in m_Keys)
+            {
+                array[i++] = new KeyValuePair<TKey, TValue>(k, m_Dictionary[k]);
             }
         }
 
@@ -273,10 +216,7 @@ namespace Cave.Collections.Generic
         /// <summary>
         /// Returns the number of elements in the dictionary.
         /// </summary>
-        public int Count
-        {
-            get { return m_Dictionary.Count; }
-        }
+        public int Count => m_Dictionary.Count;
 
         /// <summary>
         /// Removes all elements from the dictionary.
@@ -290,10 +230,7 @@ namespace Cave.Collections.Generic
         /// <summary>
         /// Returns false
         /// </summary>
-        public bool IsReadOnly
-        {
-            get { return false; }
-        }
+        public bool IsReadOnly => false;
 
         class Enumerator : IEnumerator, IEnumerator<KeyValuePair<TKey, TValue>>
         {

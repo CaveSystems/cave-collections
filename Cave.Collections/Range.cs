@@ -1,50 +1,3 @@
-#region CopyRight 2018
-/*
-    Copyright (c) 2003-2018 Andreas Rohleder (andreas@rohleder.cc)
-    All rights reserved
-*/
-#endregion
-#region License LGPL-3
-/*
-    This program/library/sourcecode is free software; you can redistribute it
-    and/or modify it under the terms of the GNU Lesser General Public License
-    version 3 as published by the Free Software Foundation subsequent called
-    the License.
-
-    You may not use this program/library/sourcecode except in compliance
-    with the License. The License is included in the LICENSE file
-    found at the installation directory or the distribution package.
-
-    Permission is hereby granted, free of charge, to any person obtaining
-    a copy of this software and associated documentation files (the
-    "Software"), to deal in the Software without restriction, including
-    without limitation the rights to use, copy, modify, merge, publish,
-    distribute, sublicense, and/or sell copies of the Software, and to
-    permit persons to whom the Software is furnished to do so, subject to
-    the following conditions:
-
-    The above copyright notice and this permission notice shall be included
-    in all copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-    LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-#endregion
-#region Authors & Contributors
-/*
-   Author:
-     Andreas Rohleder <andreas@rohleder.cc>
-
-   Contributors:
-
- */
-#endregion
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -65,8 +18,16 @@ namespace Cave.Collections
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(Range range1, Range range2)
         {
-            if (ReferenceEquals(null, range1)) return ReferenceEquals(null, range2);
-            if (ReferenceEquals(null, range2)) return false;
+            if (ReferenceEquals(null, range1))
+            {
+                return ReferenceEquals(null, range2);
+            }
+
+            if (ReferenceEquals(null, range2))
+            {
+                return false;
+            }
+
             return range1.AllValuesString == range2.AllValuesString;
         }
 
@@ -76,8 +37,16 @@ namespace Cave.Collections
         /// <returns>The result of the operator.</returns>
         public static bool operator !=(Range range1, Range range2)
         {
-            if (ReferenceEquals(null, range1)) return !ReferenceEquals(null, range2);
-            if (ReferenceEquals(null, range2)) return true;
+            if (ReferenceEquals(null, range1))
+            {
+                return !ReferenceEquals(null, range2);
+            }
+
+            if (ReferenceEquals(null, range2))
+            {
+                return true;
+            }
+
             return range1.AllValuesString != range2.AllValuesString;
         }
 
@@ -89,11 +58,21 @@ namespace Cave.Collections
         /// <returns></returns>
         public static Range operator +(Range range1, Range range2)
         {
-            if (range1 == null) throw new ArgumentNullException("range1");
-            if (range2 == null) throw new ArgumentNullException("range2");
-            Range result = new Range(Math.Min(range1.Minimum, range2.Minimum), Math.Max(range1.Maximum, range2.Maximum));
-            result.Add(range1);
-            result.Add(range2);
+            if (range1 == null)
+            {
+                throw new ArgumentNullException("range1");
+            }
+
+            if (range2 == null)
+            {
+                throw new ArgumentNullException("range2");
+            }
+
+            Range result = new Range(Math.Min(range1.Minimum, range2.Minimum), Math.Max(range1.Maximum, range2.Maximum))
+            {
+                range1,
+                range2
+            };
             return result;
         }
         #endregion
@@ -129,21 +108,37 @@ namespace Cave.Collections
                 if (text.IndexOf(RangeSeparator) > -1)
                 {
                     string[] parts = text.Split(RangeSeparator);
-                    if (parts.Length != 2) throw new ArgumentException(string.Format("Expected 'start-end'!"), "text");
+                    if (parts.Length != 2)
+                    {
+                        throw new ArgumentException(string.Format("Expected 'start-end'!"), "text");
+                    }
+
                     int start = int.Parse(parts[0]);
-                    if (start < minValue) throw new ArgumentOutOfRangeException(nameof(minValue));
+                    if (start < minValue)
+                    {
+                        throw new ArgumentOutOfRangeException(nameof(minValue));
+                    }
+
                     return Counter.Create(start, int.Parse(parts[1]));
                 }
                 if (text.IndexOf(RepetitionSeparator) > -1)
                 {
                     string[] parts = text.Split(RepetitionSeparator);
-                    if (parts.Length != 2) throw new ArgumentException("Expected 'start/repetition'!", "text");
+                    if (parts.Length != 2)
+                    {
+                        throw new ArgumentException("Expected 'start/repetition'!", "text");
+                    }
+
                     if (parts[0] == AllValuesString)
                     {
                         return Counter.Create(minValue, maxValue, int.Parse(parts[1]));
                     }
                     int start = int.Parse(parts[0]);
-                    if (start < minValue) throw new ArgumentOutOfRangeException(nameof(minValue));
+                    if (start < minValue)
+                    {
+                        throw new ArgumentOutOfRangeException(nameof(minValue));
+                    }
+
                     return Counter.Create(start, maxValue, int.Parse(parts[1]));
                 }
                 if (text == AllValuesString)
@@ -152,7 +147,11 @@ namespace Cave.Collections
                 }
                 {
                     int start = int.Parse(text);
-                    if (start < minValue) throw new ArgumentOutOfRangeException(nameof(minValue));
+                    if (start < minValue)
+                    {
+                        throw new ArgumentOutOfRangeException(nameof(minValue));
+                    }
+
                     return new Counter(start, 1);
                 }
             }
@@ -176,7 +175,11 @@ namespace Cave.Collections
                 }
                 else
                 {
-                    if (allValueRangePart) throw new ArgumentException(string.Format("You may not add an all-value-range and a normal range!"));
+                    if (allValueRangePart)
+                    {
+                        throw new ArgumentException(string.Format("You may not add an all-value-range and a normal range!"));
+                    }
+
                     result.Add(counter);
                 }
             }
@@ -190,7 +193,7 @@ namespace Cave.Collections
         /// </summary>
         public string AllValuesString
         {
-            get { return m_AllValuesString; }
+            get => m_AllValuesString;
             set { m_AllValuesString = value; m_CurrentString = null; }
         }
 
@@ -199,7 +202,7 @@ namespace Cave.Collections
         /// </summary>
         public char RangeSeparator
         {
-            get { return m_RangeSeparator; }
+            get => m_RangeSeparator;
             set { m_RangeSeparator = value; m_CurrentString = null; }
         }
 
@@ -208,7 +211,7 @@ namespace Cave.Collections
         /// </summary>
         public char ValueSeparator
         {
-            get { return m_ValueSeparator; }
+            get => m_ValueSeparator;
             set { m_ValueSeparator = value; m_CurrentString = null; }
         }
 
@@ -217,7 +220,7 @@ namespace Cave.Collections
         /// </summary>
         public char RepetitionSeparator
         {
-            get { return m_RepetitionSeparator; }
+            get => m_RepetitionSeparator;
             set { m_RepetitionSeparator = value; m_CurrentString = null; }
         }
 
@@ -262,7 +265,11 @@ namespace Cave.Collections
         /// <param name="value"></param>
         public void Add(int value)
         {
-            if (Contains(value)) return;
+            if (Contains(value))
+            {
+                return;
+            }
+
             m_Counters.Add(new Counter(value, 1));
         }
 
@@ -272,7 +279,11 @@ namespace Cave.Collections
         /// <param name="counter"></param>
         public void Add(Counter counter)
         {
-            if ((m_Counters.Count > 0) && Contains(counter)) return;
+            if ((m_Counters.Count > 0) && Contains(counter))
+            {
+                return;
+            }
+
             m_CurrentString = null;
             m_Counters.Add(counter);
         }
@@ -283,7 +294,11 @@ namespace Cave.Collections
         /// <param name="range"></param>
         public void Add(Range range)
         {
-            if (range == null) throw new ArgumentNullException("range");
+            if (range == null)
+            {
+                throw new ArgumentNullException("range");
+            }
+
             m_CurrentString = null;
             foreach (Counter c in range.m_Counters)
             {
@@ -307,7 +322,10 @@ namespace Cave.Collections
             }
             foreach (Counter counter in m_Counters)
             {
-                if (counter.Contains(value)) return true;
+                if (counter.Contains(value))
+                {
+                    return true;
+                }
             }
             return false;
         }
@@ -319,18 +337,28 @@ namespace Cave.Collections
         /// <returns></returns>
         public bool Contains(Counter counter)
         {
-            if (counter == null) throw new ArgumentNullException("counter");
+            if (counter == null)
+            {
+                throw new ArgumentNullException("counter");
+            }
+
             if (m_Counters.Count == 0)
             {
                 return Contains(counter.Start) && Contains(counter.End);
             }
             foreach (Counter c in m_Counters)
             {
-                if (counter.Contains(c)) return true;
+                if (counter.Contains(c))
+                {
+                    return true;
+                }
             }
             foreach (Counter c in counter)
             {
-                if (Contains(c)) return true;
+                if (Contains(c))
+                {
+                    return true;
+                }
             }
             return false;
         }
@@ -341,19 +369,39 @@ namespace Cave.Collections
         /// <returns></returns>
         public override string ToString()
         {
-            if (m_CurrentString != null) return m_CurrentString;
-            if (m_Counters.Count == 0) return AllValuesString;
+            if (m_CurrentString != null)
+            {
+                return m_CurrentString;
+            }
+
+            if (m_Counters.Count == 0)
+            {
+                return AllValuesString;
+            }
+
             m_Counters.Sort();
             StringBuilder result = new StringBuilder();
             foreach (Counter counter in m_Counters)
             {
-                if (result.Length > 0) result.Append(ValueSeparator);
-                if (counter.Start < Minimum) return string.Format("Invalid");
+                if (result.Length > 0)
+                {
+                    result.Append(ValueSeparator);
+                }
+
+                if (counter.Start < Minimum)
+                {
+                    return string.Format("Invalid");
+                }
+
                 if (counter.Count > 1)
                 {
                     if (counter.Step != 1)
                     {
-                        if (counter.Start == Minimum) return AllValuesString + RepetitionSeparator + counter.Step;
+                        if (counter.Start == Minimum)
+                        {
+                            return AllValuesString + RepetitionSeparator + counter.Step;
+                        }
+
                         result.Append(counter.Start.ToString() + RepetitionSeparator + counter.Step.ToString());
                         continue;
                     }
@@ -383,7 +431,11 @@ namespace Cave.Collections
         public override bool Equals(object obj)
         {
             Range other = (obj as Range);
-            if (ReferenceEquals(other, null)) return false;
+            if (ReferenceEquals(other, null))
+            {
+                return false;
+            }
+
             return ToString().Equals(other.ToString());
         }
 
@@ -408,18 +460,33 @@ namespace Cave.Collections
             {
                 get
                 {
-                    if (m_Current < m_Range.Minimum) throw new InvalidOperationException(string.Format("Invalid operation, use MoveNext() first!"));
-                    if (m_Current > m_Range.Maximum) throw new InvalidOperationException(string.Format("Invalid operation, moved out of range!"));
+                    if (m_Current < m_Range.Minimum)
+                    {
+                        throw new InvalidOperationException(string.Format("Invalid operation, use MoveNext() first!"));
+                    }
+
+                    if (m_Current > m_Range.Maximum)
+                    {
+                        throw new InvalidOperationException(string.Format("Invalid operation, moved out of range!"));
+                    }
+
                     return (int)m_Current;
                 }
             }
 
             public bool MoveNext()
             {
-                if (m_Current > m_Range.Maximum) throw new InvalidOperationException(string.Format("Invalid operation, use Reset() first!"));
+                if (m_Current > m_Range.Maximum)
+                {
+                    throw new InvalidOperationException(string.Format("Invalid operation, use Reset() first!"));
+                }
+
                 while (!m_Range.Contains((int)++m_Current))
                 {
-                    if (m_Current > m_Range.Maximum) return false;
+                    if (m_Current > m_Range.Maximum)
+                    {
+                        return false;
+                    }
                 }
                 return true;
             }
