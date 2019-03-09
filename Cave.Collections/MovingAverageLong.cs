@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Cave.Collections
 {
-    /// <summary>Provides a simple moving average calculation</summary>
+    /// <summary>Provides a simple moving average calculation.</summary>
     /// <seealso cref="IAverage{T}" />
     public class MovingAverageLong : IAverage<long>
     {

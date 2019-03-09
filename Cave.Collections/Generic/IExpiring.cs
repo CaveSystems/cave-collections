@@ -1,7 +1,7 @@
 ﻿namespace Cave.Collections.Generic
 {
     /// <summary>
-    /// Provides an interface for expiring items
+    /// Provides an interface for expiring items.
     /// </summary>
     public interface IExpiring
     {

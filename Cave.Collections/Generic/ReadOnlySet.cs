@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Cave.Collections.Generic
 {
-    /// <summary>Provides a read only set</summary>
+    /// <summary>Provides a read only set.</summary>
     /// <typeparam name="T"></typeparam>
     /// <seealso cref="IItemSet{T}" />
     public class ReadOnlySet<T> : IItemSet<T>
@@ -29,7 +29,7 @@ namespace Cave.Collections.Generic
         /// <remarks>This is always true.</remarks>
         public bool IsReadOnly => true;
 
-        /// <summary>Returns true if the set is empty</summary>
+        /// <summary>Returns true if the set is empty.</summary>
         public bool IsEmpty => set.IsEmpty;
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Cave.Collections.Generic
             return set.Contains(item);
         }
 
-        /// <summary>Checks whether all specified items are part of the set</summary>
+        /// <summary>Checks whether all specified items are part of the set.</summary>
         /// <param name="items"></param>
         /// <returns>Returns true if all items are present.</returns>
         public bool ContainsRange(IEnumerable<T> items)
@@ -79,6 +79,7 @@ namespace Cave.Collections.Generic
         }
 
         #region not supported
+
         /// <summary>
         /// Adds an element to the current set and returns a value to indicate if the element was successfully added.
         /// </summary>
@@ -99,8 +100,8 @@ namespace Cave.Collections.Generic
             throw new NotSupportedException();
         }
 
-        /// <summary>Removes an item from the set</summary>
-        /// <param name="item">The item to be removed</param>
+        /// <summary>Removes an item from the set.</summary>
+        /// <param name="item">The item to be removed.</param>
         /// <exception cref="NotSupportedException"></exception>
         [Obsolete("Not supported")]
         public void Remove(T item)
@@ -108,8 +109,8 @@ namespace Cave.Collections.Generic
             throw new NotSupportedException();
         }
 
-        /// <summary>Adds a range of items to the set</summary>
-        /// <param name="items">The items to be added to the list</param>
+        /// <summary>Adds a range of items to the set.</summary>
+        /// <param name="items">The items to be added to the list.</param>
         /// <exception cref="NotSupportedException"></exception>
         [Obsolete("Not supported")]
         public void AddRange(IEnumerable<T> items)
@@ -117,8 +118,8 @@ namespace Cave.Collections.Generic
             throw new NotSupportedException();
         }
 
-        /// <summary>Adds a range of items to the set</summary>
-        /// <param name="items">The items to be added to the list</param>
+        /// <summary>Adds a range of items to the set.</summary>
+        /// <param name="items">The items to be added to the list.</param>
         /// <exception cref="NotSupportedException"></exception>
         [Obsolete("Not supported")]
         public void AddRange(params T[] items)
@@ -129,7 +130,7 @@ namespace Cave.Collections.Generic
         /// <summary>
         /// Includes an item that is not already present in the set (others are ignored).
         /// </summary>
-        /// <param name="item">The item to be included</param>
+        /// <param name="item">The item to be included.</param>
         /// <returns>Returns true if the item was added, false if it was present already.</returns>
         /// <exception cref="NotSupportedException"></exception>
         [Obsolete("Not supported")]
@@ -141,7 +142,7 @@ namespace Cave.Collections.Generic
         /// <summary>
         /// Includes items that are not already present in the set (others are ignored).
         /// </summary>
-        /// <param name="items">The items to be included</param>
+        /// <param name="items">The items to be included.</param>
         /// <returns>Returns the number of items added.</returns>
         /// <exception cref="NotSupportedException"></exception>
         [Obsolete("Not supported")]
@@ -150,8 +151,8 @@ namespace Cave.Collections.Generic
             throw new NotSupportedException();
         }
 
-        /// <summary>Adds a range of items to the set</summary>
-        /// <param name="items">The items to be added to the list</param>
+        /// <summary>Adds a range of items to the set.</summary>
+        /// <param name="items">The items to be added to the list.</param>
         /// <exception cref="NotSupportedException"></exception>
         [Obsolete("Not supported")]
         public int IncludeRange(params T[] items)
@@ -169,7 +170,7 @@ namespace Cave.Collections.Generic
             throw new NotSupportedException();
         }
 
-        /// <summary>Removes items from the set</summary>
+        /// <summary>Removes items from the set.</summary>
         /// <param name="items"></param>
         /// <returns>Returns the number of items removed.</returns>
         /// <exception cref="NotSupportedException"></exception>
@@ -179,7 +180,7 @@ namespace Cave.Collections.Generic
             throw new NotSupportedException();
         }
 
-        /// <summary>Removes items from the set</summary>
+        /// <summary>Removes items from the set.</summary>
         /// <param name="items"></param>
         /// <exception cref="NotSupportedException"></exception>
         [Obsolete("Not supported")]

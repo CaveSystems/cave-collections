@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Cave.Collections
 {
     /// <summary>
-    /// Provides an <see cref="IEnumerable"/> implementation for simple integer counting
+    /// Provides an <see cref="IEnumerable"/> implementation for simple integer counting.
     /// </summary>
     public class Counter : IEnumerable<int>, IComparable, IEnumerable
     {
@@ -15,12 +15,12 @@ namespace Cave.Collections
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(Counter counter1, Counter counter2)
         {
-            if (ReferenceEquals(null, counter1))
+            if (counter1 is null)
             {
-                return ReferenceEquals(null, counter2);
+                return counter2 is null;
             }
 
-            if (ReferenceEquals(null, counter2))
+            if (counter2 is null)
             {
                 return false;
             }
@@ -34,12 +34,12 @@ namespace Cave.Collections
         /// <returns>The result of the operator.</returns>
         public static bool operator !=(Counter counter1, Counter counter2)
         {
-            if (ReferenceEquals(null, counter1))
+            if (counter1 is null)
             {
-                return !ReferenceEquals(null, counter2);
+                return !(counter2 is null);
             }
 
-            if (ReferenceEquals(null, counter2))
+            if (counter2 is null)
             {
                 return true;
             }
@@ -53,12 +53,12 @@ namespace Cave.Collections
         /// <returns>The result of the operator.</returns>
         public static bool operator <(Counter counter1, Counter counter2)
         {
-            if (ReferenceEquals(counter1, null))
+            if (counter1 is null)
             {
                 return true;
             }
 
-            if (ReferenceEquals(counter2, null))
+            if (counter2 is null)
             {
                 return false;
             }
@@ -72,12 +72,12 @@ namespace Cave.Collections
         /// <returns>The result of the operator.</returns>
         public static bool operator >(Counter counter1, Counter counter2)
         {
-            if (ReferenceEquals(counter2, null))
+            if (counter2 is null)
             {
                 return true;
             }
 
-            if (ReferenceEquals(counter1, null))
+            if (counter1 is null)
             {
                 return false;
             }
@@ -86,48 +86,47 @@ namespace Cave.Collections
         }
 
         /// <summary>
-        /// Creates a new <see cref="Counter"/> from the specified start and end values
+        /// Creates a new <see cref="Counter"/> from the specified start and end values.
         /// </summary>
-        /// <param name="start">The first value</param>
-        /// <param name="end">The last value to be part of the counter</param>
-        /// <returns>Returns a new <see cref="Counter"/> instance</returns>
+        /// <param name="start">The first value.</param>
+        /// <param name="end">The last value to be part of the counter.</param>
+        /// <returns>Returns a new <see cref="Counter"/> instance.</returns>
         public static Counter Create(int start, int end)
         {
             return new Counter(start, end - start + 1);
         }
 
         /// <summary>
-        /// Creates a new <see cref="Counter"/> from the specified start and end values
+        /// Creates a new <see cref="Counter"/> from the specified start and end values.
         /// </summary>
-        /// <param name="start">The first value</param>
-        /// <param name="end">The last value</param>
-        /// <param name="step">The step between two values</param>
-        /// <returns>Returns a new <see cref="Counter"/> instance</returns>
+        /// <param name="start">The first value.</param>
+        /// <param name="end">The last value.</param>
+        /// <param name="step">The step between two values.</param>
+        /// <returns>Returns a new <see cref="Counter"/> instance.</returns>
         public static Counter Create(int start, int end, int step)
         {
             return new Counter(start, end - start + 1, step);
         }
 
-        long m_Current;
-        string m_String = null;
+        long current;
 
         /// <summary>
-        /// Obtains the start value of the counter
+        /// Obtains the start value of the counter.
         /// </summary>
         public int Start { get; }
 
         /// <summary>
-        /// Obtains the number of steps the counter will move
+        /// Obtains the number of steps the counter will move.
         /// </summary>
         public int Count { get; }
 
         /// <summary>
-        /// Obtains the end value of the counter
+        /// Obtains the end value of the counter.
         /// </summary>
         public int End { get; }
 
         /// <summary>
-        /// Obtains the step between two values
+        /// Obtains the step between two values.
         /// </summary>
         public int Step { get; }
 
@@ -135,7 +134,7 @@ namespace Cave.Collections
         /// Creates an new <see cref="Counter"/> with an initial start value. This instance will
         /// count until <see cref="int.MaxValue"/> is reached.
         /// </summary>
-        /// <param name="start">The first value</param>
+        /// <param name="start">The first value.</param>
         public Counter(int start)
             : this(start, int.MaxValue - Math.Abs(start), 1)
         {
@@ -144,8 +143,8 @@ namespace Cave.Collections
         /// <summary>
         /// Creates an new <see cref="CountEnumerator"/> with an initial start value and a maximum count.
         /// </summary>
-        /// <param name="start">The first value</param>
-        /// <param name="count">The value count</param>
+        /// <param name="start">The first value.</param>
+        /// <param name="count">The value count.</param>
         public Counter(int start, int count)
             : this(start, count, 1)
         {
@@ -154,9 +153,9 @@ namespace Cave.Collections
         /// <summary>
         /// Creates an new <see cref="CountEnumerator"/> with an initial start value and a maximum count.
         /// </summary>
-        /// <param name="start">The first value</param>
-        /// <param name="count">The value count</param>
-        /// <param name="step">The step between two values</param>
+        /// <param name="start">The first value.</param>
+        /// <param name="count">The value count.</param>
+        /// <param name="step">The step between two values.</param>
         public Counter(int start, int count, int step)
         {
             Start = start;
@@ -177,10 +176,10 @@ namespace Cave.Collections
         }
 
         /// <summary>
-        /// Checks whether a specified value is part of the <see cref="Counter"/> or not
+        /// Checks whether a specified value is part of the <see cref="Counter"/> or not.
         /// </summary>
-        /// <param name="value">The value to be checked</param>
-        /// <returns>Returns true if the value is part of the counter</returns>
+        /// <param name="value">The value to be checked.</param>
+        /// <returns>Returns true if the value is part of the counter.</returns>
         public bool Contains(int value)
         {
             if (value > End)
@@ -193,14 +192,14 @@ namespace Cave.Collections
                 return false;
             }
 
-            return (((value - Start) % Step) == 0);
+            return ((value - Start) % Step) == 0;
         }
 
         /// <summary>
-        /// Checks whether a specified <see cref="Counter"/> is part of the <see cref="Counter"/> or not
+        /// Checks whether a specified <see cref="Counter"/> is part of the <see cref="Counter"/> or not.
         /// </summary>
-        /// <param name="counter">The <see cref="Counter"/> whose values to be checked</param>
-        /// <returns>Returns true if the specified counter is part of the counter</returns>
+        /// <param name="counter">The <see cref="Counter"/> whose values to be checked.</param>
+        /// <returns>Returns true if the specified counter is part of the counter.</returns>
         public bool Contains(Counter counter)
         {
             if (counter == null)
@@ -237,63 +236,63 @@ namespace Cave.Collections
         }
 
         /// <summary>
-        /// Steps to the next value
+        /// Steps to the next value.
         /// </summary>
-        /// <returns>Returns true if the next value is part of the counter and can be retrieved</returns>
+        /// <returns>Returns true if the next value is part of the counter and can be retrieved.</returns>
         public bool MoveNext()
         {
-            if (m_Current > End)
+            if (current > End)
             {
                 throw new InvalidOperationException(string.Format("Moving out of range!"));
             }
 
-            m_Current += Step;
-            return m_Current <= End;
+            current += Step;
+            return current <= End;
         }
 
         /// <summary>
-        /// Resets the counter
+        /// Resets the counter.
         /// </summary>
         public void Reset()
         {
-            m_Current = Start - Step;
+            current = Start - Step;
         }
 
         /// <summary>
-        /// Obtains the current value
+        /// Obtains the current value.
         /// </summary>
         public int Current
         {
             get
             {
-                if (m_Current < Start)
+                if (current < Start)
                 {
                     throw new InvalidOperationException(string.Format("Invalid operation, use MoveNext() first!"));
                 }
 
-                if (m_Current > End)
+                if (current > End)
                 {
                     throw new InvalidOperationException(string.Format("Invalid operation, moved out of range!"));
                 }
 
-                return (int)m_Current;
+                return (int)current;
             }
         }
 
         /// <summary>
         /// Obtains whether the counter was started already or not.
         /// </summary>
-        public bool Started => m_Current >= Start;
+        public bool Started => current >= Start;
 
         /// <summary>
-        /// Checks another <see cref="Counter"/> for equality
+        /// Checks another <see cref="Counter"/> for equality.
         /// </summary>
-        /// <param name="obj">The <see cref="Counter"/> instance to check for equality</param>
-        /// <returns>Returns true if the specified object equals this one</returns>
+        /// <param name="obj">The <see cref="Counter"/> instance to check for equality.</param>
+        /// <returns>Returns true if the specified object equals this one.</returns>
         public override bool Equals(object obj)
         {
             Counter other = obj as Counter;
-            if (ReferenceEquals(other, null))
+            if (other is null)
             {
                 return false;
             }
@@ -302,22 +301,13 @@ namespace Cave.Collections
         }
 
         /// <summary>
-        /// Obtains the counter properties as string
+        /// Obtains the counter properties as string.
         /// </summary>
-        /// <returns>Returns a string representing this object</returns>
-        public override string ToString()
-        {
-            if (m_String != null)
-            {
-                return m_String;
-            }
-
-            m_String = "x = k * " + Step + " | " + (Start - 1L) + " < k < " + (End + 1L);
-            return m_String;
-        }
+        /// <returns>Returns a string representing this object.</returns>
+        public override string ToString() => "x = k * " + Step + " | " + (Start - 1L) + " < k < " + (End + 1L);
 
         /// <summary>
-        /// Obtains a hash code for this instance
+        /// Obtains a hash code for this instance.
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
@@ -328,9 +318,9 @@ namespace Cave.Collections
         #region IEnumerable<int> Member
 
         /// <summary>
-        /// Obtains a <see cref="CountEnumerator"/>
+        /// Obtains a <see cref="CountEnumerator"/>.
         /// </summary>
-        /// <returns>Returns a new IEnumerator{int} instance</returns>
+        /// <returns>Returns a new IEnumerator{int} instance.</returns>
         IEnumerator<int> IEnumerable<int>.GetEnumerator()
         {
             return new CountEnumerator(this);
@@ -341,9 +331,9 @@ namespace Cave.Collections
         #region IEnumerable Member
 
         /// <summary>
-        /// Obtains a <see cref="CountEnumerator"/>
+        /// Obtains a <see cref="CountEnumerator"/>.
         /// </summary>
-        /// <returns>Returns a new IEnumerator instance</returns>
+        /// <returns>Returns a new IEnumerator instance.</returns>
         public IEnumerator GetEnumerator()
         {
             return new CountEnumerator(this);
@@ -354,7 +344,7 @@ namespace Cave.Collections
         #region IComparable Member
 
         /// <summary>
-        /// Compares the start of two <see cref="Counter"/>s
+        /// Compares the start of two <see cref="Counter"/>s.
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>

@@ -5,64 +5,72 @@ using System.Collections.Generic;
 namespace Cave.Collections
 {
     /// <summary>
-    /// Provides an <see cref="IEnumerator"/> implementation for simple integer counting
+    /// Provides an <see cref="IEnumerator"/> implementation for simple integer counting.
     /// </summary>
     public class CountEnumerator : IEnumerator<int>, IEnumerator
     {
-        Counter m_Counter;
+        Counter counter;
 
         /// <summary>
-        /// Creates a new <see cref="CountEnumerator"/>.
+        /// Initializes a new instance of the <see cref="CountEnumerator"/> class.
         /// </summary>
-        /// <param name="counter">The <see cref="Counter"/> used to create values to be enumerated</param>
+        /// <param name="counter">The <see cref="Counter"/> used to create values to be enumerated.</param>
         public CountEnumerator(Counter counter)
         {
-            m_Counter = counter;
+            this.counter = counter;
         }
 
         /// <summary>
-        /// Creates a new <see cref="CountEnumerator"/> with an initial start value.
+        /// Initializes a new instance of the <see cref="CountEnumerator"/> class.
         /// </summary>
-        /// <param name="start">The first value to be enumerated</param>
+        /// <param name="start">The first value to be enumerated.</param>
         public CountEnumerator(int start)
             : this(new Counter(start))
-        { }
+        {
+        }
 
         /// <summary>
-        /// Creates an new <see cref="CountEnumerator"/> with an initial start value and a maximum count.
+        /// Initializes a new instance of the <see cref="CountEnumerator"/> class.
         /// </summary>
-        /// <param name="start">The first value to be enumerated</param>
-        /// <param name="count">The value count to be enumerated</param>
+        /// <param name="start">The first value to be enumerated.</param>
+        /// <param name="count">The value count to be enumerated.</param>
         public CountEnumerator(int start, int count)
             : this(new Counter(start, count))
-        { }
+        {
+        }
 
         #region IEnumerator<T> Member
 
         /// <summary>
-        /// Obtains the the curent value
+        /// Gets the the curent value.
         /// </summary>
-        public int Current => m_Counter.Current;
+        public int Current => counter.Current;
 
         #endregion
 
         #region IEnumerator Member
 
         /// <summary>
-        /// Obtains the the curent value
+        /// Obtains the the curent value.
         /// </summary>
-        object IEnumerator.Current => m_Counter.Current;
+        object IEnumerator.Current => counter.Current;
 
         /// <summary>
-        /// Moves to the next value
+        /// Moves to the next value.
         /// </summary>
         /// <returns></returns>
-        public bool MoveNext() { return m_Counter.MoveNext(); }
+        public bool MoveNext()
+        {
+            return counter.MoveNext();
+        }
 
         /// <summary>
-        /// Resets the <see cref="CountEnumerator"/>
+        /// Resets the <see cref="CountEnumerator"/>.
         /// </summary>
-        public void Reset() { m_Counter.Reset(); }
+        public void Reset()
+        {
+            counter.Reset();
+        }
 
         #endregion
 
@@ -70,10 +78,12 @@ namespace Cave.Collections
 
         /// <summary>Releases the unmanaged resources used by this instance and optionally releases the managed resources.</summary>
         /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
-        protected virtual void Dispose(bool disposing) { }
+        protected virtual void Dispose(bool disposing)
+        {
+        }
 
         /// <summary>
-        /// Frees all used resources
+        /// Frees all used resources.
         /// </summary>
         public void Dispose()
         {

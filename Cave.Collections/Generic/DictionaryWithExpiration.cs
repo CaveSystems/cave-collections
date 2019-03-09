@@ -6,12 +6,13 @@ using System.Linq;
 namespace Cave.Collections.Generic
 {
     /// <summary>
-    /// Provides a dictionary with expiring items
+    /// Provides a dictionary with expiring items.
     /// </summary>
     /// <typeparam name="TKey">The type of the key.</typeparam>
     /// <typeparam name="TValue">The type of the value.</typeparam>
     /// <seealso cref="System.Collections.Generic.IDictionary{TKey, TValue}" />
-    public class DictionaryWithExpiration<TKey, TValue> : IDictionary<TKey, TValue> where TValue : IExpiring
+    public class DictionaryWithExpiration<TKey, TValue> : IDictionary<TKey, TValue>
+        where TValue : IExpiring
     {
         Dictionary<TKey, TValue> items = new Dictionary<TKey, TValue>();
         long nextCheckTicks;
@@ -77,7 +78,7 @@ namespace Cave.Collections.Generic
         }
 
         /// <summary>
-        /// Returns false
+        /// Returns false.
         /// </summary>
         public bool IsReadOnly => false;
 

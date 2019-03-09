@@ -18,12 +18,12 @@ namespace Cave.Collections
         /// <returns>The result of the operator.</returns>
         public static bool operator ==(Range range1, Range range2)
         {
-            if (ReferenceEquals(null, range1))
+            if (range1 is null)
             {
-                return ReferenceEquals(null, range2);
+                return range2 is null;
             }
 
-            if (ReferenceEquals(null, range2))
+            if (range2 is null)
             {
                 return false;
             }
@@ -37,12 +37,12 @@ namespace Cave.Collections
         /// <returns>The result of the operator.</returns>
         public static bool operator !=(Range range1, Range range2)
         {
-            if (ReferenceEquals(null, range1))
+            if (range1 is null)
             {
-                return !ReferenceEquals(null, range2);
+                return !(range2 is null);
             }
 
-            if (ReferenceEquals(null, range2))
+            if (range2 is null)
             {
                 return true;
             }
@@ -51,7 +51,7 @@ namespace Cave.Collections
         }
 
         /// <summary>
-        /// Adds two <see cref="Range"/>s
+        /// Adds two <see cref="Range"/>s.
         /// </summary>
         /// <param name="range1"></param>
         /// <param name="range2"></param>
@@ -71,19 +71,20 @@ namespace Cave.Collections
             Range result = new Range(Math.Min(range1.Minimum, range2.Minimum), Math.Max(range1.Maximum, range2.Maximum))
             {
                 range1,
-                range2
+                range2,
             };
             return result;
         }
         #endregion
 
         #region static functionality
+
         /// <summary>
-        /// Parses a <see cref="Range"/> from a specified string
+        /// Parses a <see cref="Range"/> from a specified string.
         /// </summary>
-        /// <param name="text">A <see cref="Range"/> string</param>
-        /// <param name="min">Minimum value of the <see cref="Range"/></param>
-        /// <param name="max">Maximum value of the <see cref="Range"/></param>
+        /// <param name="text">A <see cref="Range"/> string.</param>
+        /// <param name="min">Minimum value of the <see cref="Range"/>.</param>
+        /// <param name="max">Maximum value of the <see cref="Range"/>.</param>
         /// <returns></returns>
         public static Range Parse(string text, int min, int max)
         {
@@ -94,14 +95,14 @@ namespace Cave.Collections
         #endregion
 
         #region private functionality
-        List<Counter> m_Counters = new List<Counter>();
-        string m_CurrentString = null;
-        string m_AllValuesString = "*";
-        char m_RangeSeparator = '-';
-        char m_ValueSeparator = ',';
-        char m_RepetitionSeparator = '/';
+        List<Counter> counters = new List<Counter>();
+        string currentString = null;
+        string allValuesString = "*";
+        char rangeSeparator = '-';
+        char valueSeparator = ',';
+        char repetitionSeparator = '/';
 
-        Counter m_ParseRangePart(string text, int minValue, int maxValue)
+        Counter ParseRangePart(string text, int minValue, int maxValue)
         {
             try
             {
@@ -161,14 +162,14 @@ namespace Cave.Collections
             }
         }
 
-        Counter[] m_ParseRange(string text, int minValue, int maxValue)
+        Counter[] ParseRange(string text, int minValue, int maxValue)
         {
             bool allValueRangePart = false;
             List<Counter> result = new List<Counter>();
             string[] parts = text.Split(new char[] { ValueSeparator }, StringSplitOptions.RemoveEmptyEntries);
             foreach (string part in parts)
             {
-                Counter counter = m_ParseRangePart(part, minValue, maxValue);
+                Counter counter = ParseRangePart(part, minValue, maxValue);
                 if (counter == null)
                 {
                     allValueRangePart = true;
@@ -188,54 +189,71 @@ namespace Cave.Collections
         #endregion
 
         #region public functionality
+
         /// <summary>
-        /// Gets / sets the all values string
+        /// Gets / sets the all values string.
         /// </summary>
         public string AllValuesString
         {
-            get => m_AllValuesString;
-            set { m_AllValuesString = value; m_CurrentString = null; }
+            get => allValuesString;
+            set
+            {
+                allValuesString = value;
+                currentString = null;
+            }
         }
 
         /// <summary>
-        /// Gets / sets the range separator
+        /// Gets / sets the range separator.
         /// </summary>
         public char RangeSeparator
         {
-            get => m_RangeSeparator;
-            set { m_RangeSeparator = value; m_CurrentString = null; }
+            get => rangeSeparator;
+            set
+            {
+                rangeSeparator = value;
+                currentString = null;
+            }
         }
 
         /// <summary>
-        /// Gets / sets the value separator
+        /// Gets / sets the value separator.
         /// </summary>
         public char ValueSeparator
         {
-            get => m_ValueSeparator;
-            set { m_ValueSeparator = value; m_CurrentString = null; }
+            get => valueSeparator;
+            set
+            {
+                valueSeparator = value;
+                currentString = null;
+            }
         }
 
         /// <summary>
-        /// Gets / sets the repetition separator
+        /// Gets / sets the repetition separator.
         /// </summary>
         public char RepetitionSeparator
         {
-            get => m_RepetitionSeparator;
-            set { m_RepetitionSeparator = value; m_CurrentString = null; }
+            get => repetitionSeparator;
+            set
+            {
+                repetitionSeparator = value;
+                currentString = null;
+            }
         }
 
         /// <summary>
-        /// Obtains the minimum of the <see cref="Range"/>
+        /// Obtains the minimum of the <see cref="Range"/>.
         /// </summary>
         public int Minimum { get; }
 
         /// <summary>
-        /// Obtains the maximum of the <see cref="Range"/>
+        /// Obtains the maximum of the <see cref="Range"/>.
         /// </summary>
         public int Maximum { get; }
 
         /// <summary>
-        /// Creates a new full range with the specified minimum and maximum
+        /// Creates a new full range with the specified minimum and maximum.
         /// </summary>
         /// <param name="min"></param>
         /// <param name="max"></param>
@@ -251,8 +269,8 @@ namespace Cave.Collections
         /// <param name="text"></param>
         public void Parse(string text)
         {
-            m_Counters.Clear();
-            Counter[] counters = m_ParseRange(text, Minimum, Maximum);
+            this.counters.Clear();
+            Counter[] counters = ParseRange(text, Minimum, Maximum);
             foreach (Counter counter in counters)
             {
                 Add(counter);
@@ -260,7 +278,7 @@ namespace Cave.Collections
         }
 
         /// <summary>
-        /// Adds a value to this <see cref="Range"/>
+        /// Adds a value to this <see cref="Range"/>.
         /// </summary>
         /// <param name="value"></param>
         public void Add(int value)
@@ -270,26 +288,26 @@ namespace Cave.Collections
                 return;
             }
 
-            m_Counters.Add(new Counter(value, 1));
+            counters.Add(new Counter(value, 1));
         }
 
         /// <summary>
-        /// Adds a <see cref="Counter"/> to this <see cref="Range"/>
+        /// Adds a <see cref="Counter"/> to this <see cref="Range"/>.
         /// </summary>
         /// <param name="counter"></param>
         public void Add(Counter counter)
         {
-            if ((m_Counters.Count > 0) && Contains(counter))
+            if ((counters.Count > 0) && Contains(counter))
             {
                 return;
             }
 
-            m_CurrentString = null;
-            m_Counters.Add(counter);
+            currentString = null;
+            counters.Add(counter);
         }
 
         /// <summary>
-        /// Adds a <see cref="Range"/> to this <see cref="Range"/>
+        /// Adds a <see cref="Range"/> to this <see cref="Range"/>.
         /// </summary>
         /// <param name="range"></param>
         public void Add(Range range)
@@ -299,28 +317,28 @@ namespace Cave.Collections
                 throw new ArgumentNullException("range");
             }
 
-            m_CurrentString = null;
-            foreach (Counter c in range.m_Counters)
+            currentString = null;
+            foreach (Counter c in range.counters)
             {
                 if (!Contains(c))
                 {
-                    m_Counters.Add(c);
+                    counters.Add(c);
                 }
             }
         }
 
         /// <summary>
-        /// Checks whether a specified value is part of the <see cref="Range"/> or not
+        /// Checks whether a specified value is part of the <see cref="Range"/> or not.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         public bool Contains(int value)
         {
-            if (m_Counters.Count == 0)
+            if (counters.Count == 0)
             {
                 return (value >= Minimum) && (value <= Maximum);
             }
-            foreach (Counter counter in m_Counters)
+            foreach (Counter counter in counters)
             {
                 if (counter.Contains(value))
                 {
@@ -331,7 +349,7 @@ namespace Cave.Collections
         }
 
         /// <summary>
-        /// Checks whether a specified <see cref="Counter"/> is part of the <see cref="Range"/> or not
+        /// Checks whether a specified <see cref="Counter"/> is part of the <see cref="Range"/> or not.
         /// </summary>
         /// <param name="counter"></param>
         /// <returns></returns>
@@ -342,11 +360,11 @@ namespace Cave.Collections
                 throw new ArgumentNullException("counter");
             }
 
-            if (m_Counters.Count == 0)
+            if (counters.Count == 0)
             {
                 return Contains(counter.Start) && Contains(counter.End);
             }
-            foreach (Counter c in m_Counters)
+            foreach (Counter c in counters)
             {
                 if (counter.Contains(c))
                 {
@@ -364,24 +382,24 @@ namespace Cave.Collections
         }
 
         /// <summary>
-        /// Obtains the counter properties as string
+        /// Obtains the counter properties as string.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
         {
-            if (m_CurrentString != null)
+            if (currentString != null)
             {
-                return m_CurrentString;
+                return currentString;
             }
 
-            if (m_Counters.Count == 0)
+            if (counters.Count == 0)
             {
                 return AllValuesString;
             }
 
-            m_Counters.Sort();
+            counters.Sort();
             StringBuilder result = new StringBuilder();
-            foreach (Counter counter in m_Counters)
+            foreach (Counter counter in counters)
             {
                 if (result.Length > 0)
                 {
@@ -410,12 +428,12 @@ namespace Cave.Collections
                 }
                 result.Append(counter.Start.ToString());
             }
-            m_CurrentString = result.ToString();
-            return m_CurrentString;
+            currentString = result.ToString();
+            return currentString;
         }
 
         /// <summary>
-        /// Obtains a hash code for this instance
+        /// Obtains a hash code for this instance.
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
@@ -424,14 +442,14 @@ namespace Cave.Collections
         }
 
         /// <summary>
-        /// Checks two ranges for equality
+        /// Checks two ranges for equality.
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
         public override bool Equals(object obj)
         {
-            Range other = (obj as Range);
-            if (ReferenceEquals(other, null))
+            Range other = obj as Range;
+            if (other is null)
             {
                 return false;
             }
@@ -445,12 +463,12 @@ namespace Cave.Collections
 
         class RangeEnumerator : IEnumerator
         {
-            Range m_Range;
-            long m_Current;
+            Range range;
+            long current;
 
             public RangeEnumerator(Range range)
             {
-                m_Range = range;
+                this.range = range;
                 Reset();
             }
 
@@ -460,30 +478,30 @@ namespace Cave.Collections
             {
                 get
                 {
-                    if (m_Current < m_Range.Minimum)
+                    if (current < range.Minimum)
                     {
                         throw new InvalidOperationException(string.Format("Invalid operation, use MoveNext() first!"));
                     }
 
-                    if (m_Current > m_Range.Maximum)
+                    if (current > range.Maximum)
                     {
                         throw new InvalidOperationException(string.Format("Invalid operation, moved out of range!"));
                     }
 
-                    return (int)m_Current;
+                    return (int)current;
                 }
             }
 
             public bool MoveNext()
             {
-                if (m_Current > m_Range.Maximum)
+                if (current > range.Maximum)
                 {
                     throw new InvalidOperationException(string.Format("Invalid operation, use Reset() first!"));
                 }
 
-                while (!m_Range.Contains((int)++m_Current))
+                while (!range.Contains((int)++current))
                 {
-                    if (m_Current > m_Range.Maximum)
+                    if (current > range.Maximum)
                     {
                         return false;
                     }
@@ -493,14 +511,14 @@ namespace Cave.Collections
 
             public void Reset()
             {
-                m_Current = m_Range.Minimum - 1L;
+                current = range.Minimum - 1L;
             }
 
             #endregion
         }
 
         /// <summary>
-        /// Obtains an <see cref="IEnumerator"/>
+        /// Obtains an <see cref="IEnumerator"/>.
         /// </summary>
         /// <returns></returns>
         public IEnumerator GetEnumerator()

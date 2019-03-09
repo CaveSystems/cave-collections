@@ -4,7 +4,7 @@ using System.Linq;
 namespace Cave.Collections.Generic
 {
     /// <summary>
-    /// Provides extensions to the IEnumerable interface
+    /// Provides extensions to the IEnumerable interface.
     /// </summary>
     public static class IEnumerableExtension
     {

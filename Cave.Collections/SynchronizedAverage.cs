@@ -5,7 +5,7 @@ using System.Linq;
 namespace Cave.Collections
 {
     /// <summary>
-    /// Provides a synchronzation wrapper for <see cref="IAverage{T}"/> implementations
+    /// Provides a synchronzation wrapper for <see cref="IAverage{T}"/> implementations.
     /// </summary>
     /// <seealso cref="IAverage{T}" />
     public class SynchronizedAverage<T> : IAverage<T>
@@ -23,18 +23,52 @@ namespace Cave.Collections
 
         /// <summary>Gets the average for the current items.</summary>
         /// <value>The average.</value>
-        public T Average { get { lock (Base) { return Base.Average; } } }
+        public T Average
+        {
+            get
+            {
+                lock (Base)
+                {
+                    return Base.Average;
+                }
+            }
+        }
 
         /// <summary>Gets or sets the maximum item count.</summary>
         /// <value>The maximum count.</value>
         /// <remarks>
         /// Setting this to zero or negative values disables the maximum item count. An update is done after next call to <see cref="Add(T)" />.
         /// </remarks>
-        public int MaximumCount { get { lock (Base) { return Base.MaximumCount; } } set { lock (Base) { Base.MaximumCount = value; } } }
+        public int MaximumCount
+        {
+            get
+            {
+                lock (Base)
+                {
+                    return Base.MaximumCount;
+                }
+            }
+            set
+            {
+                lock (Base)
+                {
+                    Base.MaximumCount = value;
+                }
+            }
+        }
 
         /// <summary>Gets the current item count.</summary>
         /// <value>The item count.</value>
-        public int Count { get { lock (Base) { return Base.Count; } } }
+        public int Count
+        {
+            get
+            {
+                lock (Base)
+                {
+                    return Base.Count;
+                }
+            }
+        }
 
         /// <summary>Adds the specified item.</summary>
         /// <param name="item">The item.</param>

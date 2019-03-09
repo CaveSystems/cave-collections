@@ -6,16 +6,15 @@ using System.Diagnostics;
 namespace Cave.Collections.Generic
 {
     /// <summary>
-    /// Provides an indexed dictionary (a TKey, TValue dictionary supporting access to the KeyValuePair items by index)
+    /// Provides an indexed dictionary (a TKey, TValue dictionary supporting access to the KeyValuePair items by index).
     /// </summary>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>
-
     [DebuggerDisplay("Count={Count}")]
     public class IndexedDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     {
-        Dictionary<TKey, TValue> m_Dictionary;
-        List<TKey> m_Keys;
+        Dictionary<TKey, TValue> dictionary;
+        List<TKey> keys;
 
         #region IDictionary<T1, T2> implementation
 
@@ -24,8 +23,8 @@ namespace Cave.Collections.Generic
         /// </summary>
         public IndexedDictionary()
         {
-            m_Dictionary = new Dictionary<TKey, TValue>();
-            m_Keys = new List<TKey>();
+            dictionary = new Dictionary<TKey, TValue>();
+            keys = new List<TKey>();
         }
 
         /// <summary>
@@ -35,8 +34,8 @@ namespace Cave.Collections.Generic
         /// <param name="value"></param>
         public void Add(TKey key, TValue value)
         {
-            m_Dictionary.Add(key, value);
-            m_Keys.Add(key);
+            dictionary.Add(key, value);
+            keys.Add(key);
         }
 
         /// <summary>
@@ -46,13 +45,13 @@ namespace Cave.Collections.Generic
         /// <returns></returns>
         public bool ContainsKey(TKey key)
         {
-            return m_Dictionary.ContainsKey(key);
+            return dictionary.ContainsKey(key);
         }
 
         /// <summary>
         /// Gets a collection containing the keys.
         /// </summary>
-        public ICollection<TKey> Keys => m_Keys.AsReadOnly();
+        public ICollection<TKey> Keys => keys.AsReadOnly();
 
         /// <summary>
         /// Removes the value with the specified key.
@@ -61,7 +60,7 @@ namespace Cave.Collections.Generic
         /// <returns></returns>
         public bool Remove(TKey key)
         {
-            return m_Dictionary.Remove(key) && m_Keys.Remove(key);
+            return dictionary.Remove(key) && keys.Remove(key);
         }
 
         /// <summary>
@@ -72,13 +71,13 @@ namespace Cave.Collections.Generic
         /// <returns></returns>
         public bool TryGetValue(TKey key, out TValue value)
         {
-            return m_Dictionary.TryGetValue(key, out value);
+            return dictionary.TryGetValue(key, out value);
         }
 
         /// <summary>
         /// Gets a collection containing the values.
         /// </summary>
-        public ICollection<TValue> Values => m_Dictionary.Values;
+        public ICollection<TValue> Values => dictionary.Values;
 
         /// <summary>
         /// Gets/sets the value at the specified key.
@@ -87,12 +86,12 @@ namespace Cave.Collections.Generic
         /// <returns></returns>
         public TValue this[TKey key]
         {
-            get => m_Dictionary[key];
+            get => dictionary[key];
             set
             {
-                if (m_Dictionary.ContainsKey(key))
+                if (dictionary.ContainsKey(key))
                 {
-                    m_Dictionary[key] = value;
+                    dictionary[key] = value;
                     return;
                 }
                 Add(key, value);
@@ -115,7 +114,7 @@ namespace Cave.Collections.Generic
         /// <returns></returns>
         public bool Contains(KeyValuePair<TKey, TValue> item)
         {
-            return m_Dictionary.ContainsKey(item.Key) && Equals(item.Value, m_Dictionary[item.Key]);
+            return dictionary.ContainsKey(item.Key) && Equals(item.Value, dictionary[item.Key]);
         }
 
         /// <summary>
@@ -131,9 +130,9 @@ namespace Cave.Collections.Generic
             }
 
             int i = arrayIndex;
-            foreach (TKey k in m_Keys)
+            foreach (TKey k in keys)
             {
-                array[i++] = new KeyValuePair<TKey, TValue>(k, m_Dictionary[k]);
+                array[i++] = new KeyValuePair<TKey, TValue>(k, dictionary[k]);
             }
         }
 
@@ -144,7 +143,7 @@ namespace Cave.Collections.Generic
         /// <returns></returns>
         public bool Remove(KeyValuePair<TKey, TValue> item)
         {
-            return m_Dictionary.Remove(item.Key) && m_Keys.Remove(item.Key);
+            return dictionary.Remove(item.Key) && keys.Remove(item.Key);
         }
 
         /// <summary>
@@ -153,12 +152,13 @@ namespace Cave.Collections.Generic
         /// <returns></returns>
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
-            return m_Dictionary.GetEnumerator();
+            return dictionary.GetEnumerator();
         }
 
         #endregion
 
         #region IList<T1> implementation
+
         /// <summary>
         /// Returns the zero-based index of the first occurrence of the specified value.
         /// </summary>
@@ -166,7 +166,7 @@ namespace Cave.Collections.Generic
         /// <returns></returns>
         public int IndexOf(TKey key)
         {
-            return m_Keys.IndexOf(key);
+            return keys.IndexOf(key);
         }
 
         #endregion
@@ -178,7 +178,7 @@ namespace Cave.Collections.Generic
         /// <returns></returns>
         public TValue GetValueAt(int index)
         {
-            return m_Dictionary[m_Keys[index]];
+            return dictionary[keys[index]];
         }
 
         /// <summary>
@@ -188,92 +188,92 @@ namespace Cave.Collections.Generic
         /// <param name="value"></param>
         public void SetValueAt(int index, TValue value)
         {
-            m_Dictionary[m_Keys[index]] = value;
+            dictionary[keys[index]] = value;
         }
 
         /// <summary>
         /// Gets the key at the specified index.
         /// </summary>
-        /// <param name="index">index to read</param>
-        /// <returns>returns the key</returns>
+        /// <param name="index">index to read.</param>
+        /// <returns>returns the key.</returns>
         public TKey GetKeyAt(int index)
         {
-            return m_Keys[index];
+            return keys[index];
         }
 
         /// <summary>
-        /// Gets the key and value at the specified index
+        /// Gets the key and value at the specified index.
         /// </summary>
-        /// <param name="index">index to read</param>
-        /// <param name="key">the key</param>
-        /// <param name="value">the value</param>
+        /// <param name="index">index to read.</param>
+        /// <param name="key">the key.</param>
+        /// <param name="value">the value.</param>
         public void GetKeyValueAt(int index, out TKey key, out TValue value)
         {
-            key = m_Keys[index];
-            value = m_Dictionary[key];
+            key = keys[index];
+            value = dictionary[key];
         }
 
         /// <summary>
         /// Returns the number of elements in the dictionary.
         /// </summary>
-        public int Count => m_Dictionary.Count;
+        public int Count => dictionary.Count;
 
         /// <summary>
         /// Removes all elements from the dictionary.
         /// </summary>
         public void Clear()
         {
-            m_Dictionary.Clear();
-            m_Keys.Clear();
+            dictionary.Clear();
+            keys.Clear();
         }
 
         /// <summary>
-        /// Returns false
+        /// Returns false.
         /// </summary>
         public bool IsReadOnly => false;
 
         class Enumerator : IEnumerator, IEnumerator<KeyValuePair<TKey, TValue>>
         {
-            IEnumerator<TKey> m_KeyEnumerator;
-            IndexedDictionary<TKey, TValue> m_Dictionary;
+            IEnumerator<TKey> keyEnumerator;
+            IndexedDictionary<TKey, TValue> dictionary;
 
             public Enumerator(IndexedDictionary<TKey, TValue> dictionary)
             {
-                m_Dictionary = dictionary;
-                m_KeyEnumerator = m_Dictionary.m_Keys.GetEnumerator();
+                this.dictionary = dictionary;
+                keyEnumerator = this.dictionary.keys.GetEnumerator();
             }
 
             public KeyValuePair<TKey, TValue> Current
             {
                 get
                 {
-                    TKey key = m_KeyEnumerator.Current;
-                    return new KeyValuePair<TKey, TValue>(key, m_Dictionary[key]);
+                    TKey key = keyEnumerator.Current;
+                    return new KeyValuePair<TKey, TValue>(key, dictionary[key]);
                 }
             }
 
             public void Dispose()
             {
-                m_KeyEnumerator.Dispose();
+                keyEnumerator.Dispose();
             }
 
             object IEnumerator.Current
             {
                 get
                 {
-                    TKey key = m_KeyEnumerator.Current;
-                    return new KeyValuePair<TKey, TValue>(key, m_Dictionary[key]);
+                    TKey key = keyEnumerator.Current;
+                    return new KeyValuePair<TKey, TValue>(key, dictionary[key]);
                 }
             }
 
             public bool MoveNext()
             {
-                return m_KeyEnumerator.MoveNext();
+                return keyEnumerator.MoveNext();
             }
 
             public void Reset()
             {
-                m_KeyEnumerator.Reset();
+                keyEnumerator.Reset();
             }
         }
 

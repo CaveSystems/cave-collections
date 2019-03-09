@@ -7,7 +7,7 @@ using System.Text;
 namespace Cave.Collections.Generic
 {
     /// <summary>
-    /// Provides a option collection implementation
+    /// Provides a option collection implementation.
     /// </summary>
     [DebuggerDisplay("Count={Count}")]
     public class OptionCollection : IEnumerable<Option>, IEquatable<OptionCollection>
@@ -21,7 +21,7 @@ namespace Cave.Collections.Generic
         }
 
         /// <summary>
-        /// Obtains an Array of <see cref="Option"/>s from a <see cref="IDictionary"/>
+        /// Obtains an Array of <see cref="Option"/>s from a <see cref="IDictionary"/>.
         /// </summary>
         /// <param name="dictionary"></param>
         /// <returns></returns>
@@ -42,10 +42,10 @@ namespace Cave.Collections.Generic
         }
 
         /// <summary>Obtains an Array of <see cref="Option" />s from a specified string Array.</summary>
-        /// <param name="lines">The strings to obtain Options from</param>
+        /// <param name="lines">The strings to obtain Options from.</param>
         /// <param name="ignoreInvalid">if set to <c>true</c> [ignore invalid options].</param>
         /// <returns></returns>
-        /// <exception cref="ArgumentNullException">texts</exception>
+        /// <exception cref="ArgumentNullException">texts.</exception>
         public static OptionCollection FromStrings(string[] lines, bool ignoreInvalid = false)
         {
             if (lines == null)
@@ -67,15 +67,17 @@ namespace Cave.Collections.Generic
             return result;
         }
 
-        List<string, Option> m_Items = new List<string, Option>();
+        List<string, Option> items = new List<string, Option>();
 
         /// <summary>Initializes a new empty instance of the <see cref="OptionCollection"/> class.</summary>
-        public OptionCollection() { }
+        public OptionCollection()
+        {
+        }
 
         /// <summary>
-        /// Creates a new <see cref="OptionCollection"/>
+        /// Creates a new <see cref="OptionCollection"/>.
         /// </summary>
-        /// <param name="enumeration">The <see cref="IEnumerable"/> list of <see cref="Option"/>s</param>
+        /// <param name="enumeration">The <see cref="IEnumerable"/> list of <see cref="Option"/>s.</param>
         public OptionCollection(IEnumerable<Option> enumeration)
         {
             if (enumeration == null)
@@ -85,14 +87,14 @@ namespace Cave.Collections.Generic
 
             foreach (Option option in enumeration)
             {
-                m_Items.Add(option.Name, option);
+                items.Add(option.Name, option);
             }
         }
 
         /// <summary>
-        /// Checks whether a specified option name is part of the collection
+        /// Checks whether a specified option name is part of the collection.
         /// </summary>
-        /// <param name="optionName">Name of the option</param>
+        /// <param name="optionName">Name of the option.</param>
         /// <returns></returns>
         public bool Contains(string optionName)
         {
@@ -101,14 +103,14 @@ namespace Cave.Collections.Generic
                 throw new ArgumentNullException("optionName");
             }
 
-            return m_Items.ContainsA(optionName);
+            return items.ContainsA(optionName);
         }
 
         /// <summary>
         /// Obtains the index of the first option with the specified name.
         /// </summary>
-        /// <param name="optionName">Name of the option</param>
-        /// <returns>Returns the index of the first option or -1 if no option with the specified name can be found</returns>
+        /// <param name="optionName">Name of the option.</param>
+        /// <returns>Returns the index of the first option or -1 if no option with the specified name can be found.</returns>
         int IndexOf(string optionName)
         {
             if (optionName == null)
@@ -121,15 +123,15 @@ namespace Cave.Collections.Generic
                 throw new ArgumentException("Do not prefix the optionname with an option prefix!");
             }
 
-            return m_Items.IndexOfA(optionName);
+            return items.IndexOfA(optionName);
         }
 
         /// <summary>
         /// Obtains the index of the first option with the specified name.
         /// </summary>
-        /// <param name="optionName">Name of the option</param>
-        /// <param name="start">Start index to begin search at</param>
-        /// <returns>Returns the index of the first option or -1 if no option with the specified name can be found</returns>
+        /// <param name="optionName">Name of the option.</param>
+        /// <param name="start">Start index to begin search at.</param>
+        /// <returns>Returns the index of the first option or -1 if no option with the specified name can be found.</returns>
         int IndexOf(string optionName, int start)
         {
             if (optionName == null)
@@ -142,18 +144,18 @@ namespace Cave.Collections.Generic
                 throw new ArgumentException("Do not prefix the optionname with an option prefix!");
             }
 
-            return m_Items.IndexOfA(optionName, start);
+            return items.IndexOfA(optionName, start);
         }
 
         /// <summary>
-        /// Obtains all option names
+        /// Obtains all option names.
         /// </summary>
-        public string[] Names => m_Items.ItemsA;
+        public string[] Names => items.ItemsA;
 
         /// <summary>
-        /// Allows direct access to the first<see cref="Option"/> with the specified name
+        /// Allows direct access to the first<see cref="Option"/> with the specified name.
         /// </summary>
-        /// <param name="optionName">Name of the option</param>
+        /// <param name="optionName">Name of the option.</param>
         /// <returns></returns>
         /// <exception cref="KeyNotFoundException"></exception>
         public Option this[string optionName]
@@ -171,14 +173,14 @@ namespace Cave.Collections.Generic
         }
 
         /// <summary>
-        /// Allows direct access to the first<see cref="Option"/> with the specified name
+        /// Allows direct access to the first<see cref="Option"/> with the specified name.
         /// </summary>
-        /// <param name="optionIndex">Index of the option</param>
+        /// <param name="optionIndex">Index of the option.</param>
         /// <returns></returns>
-        Option this[int optionIndex] => m_Items.GetB(optionIndex);
+        Option this[int optionIndex] => items.GetB(optionIndex);
 
         /// <summary>
-        /// Obtains a string containing all options
+        /// Obtains a string containing all options.
         /// </summary>
         /// <returns></returns>
         public override string ToString()
@@ -192,7 +194,7 @@ namespace Cave.Collections.Generic
                     result.Append(" ");
                 }
 
-                bool containsSpace = (optionString.IndexOf(' ') > -1);
+                bool containsSpace = optionString.IndexOf(' ') > -1;
                 if (containsSpace)
                 {
                     result.Append('"');
@@ -208,31 +210,31 @@ namespace Cave.Collections.Generic
         }
 
         /// <summary>
-        /// Returns an enumerator that iterates through all items
+        /// Returns an enumerator that iterates through all items.
         /// </summary>
         /// <returns></returns>
         public IEnumerator<Option> GetEnumerator()
         {
-            return ((IEnumerable<Option>)m_Items.ItemsB).GetEnumerator();
+            return ((IEnumerable<Option>)items.ItemsB).GetEnumerator();
         }
 
         /// <summary>
-        /// Returns an enumerator that iterates through all items
+        /// Returns an enumerator that iterates through all items.
         /// </summary>
         /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return m_Items.ItemsB.GetEnumerator();
+            return items.ItemsB.GetEnumerator();
         }
 
         /// <summary>
-        /// Determines whether the collection contains a specified element by using the default equality comparer. 
+        /// Determines whether the collection contains a specified element by using the default equality comparer.
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
         public bool Contains(Option item)
         {
-            return m_Items.ContainsB(item);
+            return items.ContainsB(item);
         }
 
         /// <summary>
@@ -242,21 +244,21 @@ namespace Cave.Collections.Generic
         /// <param name="arrayIndex"></param>
         public void CopyTo(Option[] array, int arrayIndex)
         {
-            m_Items.CopyTo(array, arrayIndex);
+            items.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
         /// Obtains the number of items present.
         /// </summary>
-        public int Count => m_Items.Count;
+        public int Count => items.Count;
 
         /// <summary>
-        /// Returns false
+        /// Returns false.
         /// </summary>
         public bool IsReadOnly => true;
 
         /// <summary>
-        /// Obtains all options of the collection as one dimensional array
+        /// Obtains all options of the collection as one dimensional array.
         /// </summary>
         /// <returns></returns>
         public Option[] ToArray()
@@ -273,7 +275,7 @@ namespace Cave.Collections.Generic
         /// <returns></returns>
         public bool Equals(OptionCollection other)
         {
-            if (ReferenceEquals(null, other))
+            if (other is null)
             {
                 return false;
             }
@@ -283,9 +285,9 @@ namespace Cave.Collections.Generic
                 return false;
             }
 
-            for (int i = 0; i < m_Items.Count; i++)
+            for (int i = 0; i < items.Count; i++)
             {
-                if (!m_Items[i].Equals(other.m_Items[i]))
+                if (!items[i].Equals(other.items[i]))
                 {
                     return false;
                 }
@@ -309,7 +311,7 @@ namespace Cave.Collections.Generic
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return m_Items.GetHashCode();
+            return items.GetHashCode();
         }
     }
 }

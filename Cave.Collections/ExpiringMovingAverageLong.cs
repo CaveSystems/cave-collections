@@ -7,12 +7,17 @@ using Cave.Collections.Generic;
 namespace Cave.Collections
 {
     /// <summary>
-    /// Provides a simple moving average calculation
+    /// Provides a simple moving average calculation.
     /// </summary>
     /// <seealso cref="IAverage{T}" />
     public class ExpiringMovingAverageLong : IAverage<long>
     {
-        LinkedList<C<DateTime, long>> items = new LinkedList<C<DateTime, long>>();
+        class Item
+        {
+            public DateTime DateTime;
+            public long Long;
+        }
+        LinkedList<Item> items = new LinkedList<Item>();
         long total;
 
         /// <summary>Gets the average for the current items.</summary>
@@ -37,22 +42,22 @@ namespace Cave.Collections
         /// <param name="item">The item.</param>
         public void Add(long item)
         {
-            items.AddLast(new C<DateTime, long>(DateTime.UtcNow, item));
+            items.AddLast(new Item() { DateTime = DateTime.UtcNow, Long = item, });
             total += item;
             if (MaximumCount > 0)
             {
                 while (items.Count > MaximumCount)
                 {
-                    total -= items.First.Value.V2;
+                    total -= items.First.Value.Long;
                     items.RemoveFirst();
                 }
             }
             if (MaximumAge > TimeSpan.Zero)
             {
                 DateTime keepAfter = DateTime.UtcNow - MaximumAge;
-                while (items.First.Value.V1 < keepAfter)
+                while (items.First.Value.DateTime < keepAfter)
                 {
-                    total -= items.First.Value.V2;
+                    total -= items.First.Value.Long;
                     items.RemoveFirst();
                 }
             }
@@ -69,7 +74,7 @@ namespace Cave.Collections
         /// <returns>An enumerator that can be used to iterate through the collection.</returns>
         public IEnumerator<long> GetEnumerator()
         {
-            return items.Select(i => i.V2).GetEnumerator();
+            return items.Select(i => i.Long).GetEnumerator();
         }
 
         /// <summary>Returns an enumerator that iterates through a collection.</summary>
@@ -78,7 +83,7 @@ namespace Cave.Collections
         /// </returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return items.Select(i => i.V2).GetEnumerator();
+            return items.Select(i => i.Long).GetEnumerator();
         }
     }
 }

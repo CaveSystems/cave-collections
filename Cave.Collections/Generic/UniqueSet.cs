@@ -15,9 +15,9 @@ namespace Cave.Collections.Generic
     [DebuggerDisplay("Count={Count}")]
     public sealed class UniqueSet<TKey1, TKey2> : IItemSet<TKey1, TKey2>
     {
-        Dictionary<TKey1, ItemPair<TKey1, TKey2>> m_LookupA = new Dictionary<TKey1, ItemPair<TKey1, TKey2>>();
-        Dictionary<TKey2, ItemPair<TKey1, TKey2>> m_LookupB = new Dictionary<TKey2, ItemPair<TKey1, TKey2>>();
-        List<ItemPair<TKey1, TKey2>> m_List = new List<ItemPair<TKey1, TKey2>>();
+        Dictionary<TKey1, ItemPair<TKey1, TKey2>> lookupA = new Dictionary<TKey1, ItemPair<TKey1, TKey2>>();
+        Dictionary<TKey2, ItemPair<TKey1, TKey2>> lookupB = new Dictionary<TKey2, ItemPair<TKey1, TKey2>>();
+        List<ItemPair<TKey1, TKey2>> list = new List<ItemPair<TKey1, TKey2>>();
 
         /// <summary>
         /// Rebuilds the index after an operation that destroys (one of) them.
@@ -25,12 +25,12 @@ namespace Cave.Collections.Generic
         /// </summary>
         void RebuildIndex()
         {
-            m_LookupA.Clear();
-            m_LookupB.Clear();
-            foreach (ItemPair<TKey1, TKey2> node in m_List)
+            lookupA.Clear();
+            lookupB.Clear();
+            foreach (ItemPair<TKey1, TKey2> node in list)
             {
-                m_LookupA.Add(node.A, node);
-                m_LookupB.Add(node.B, node);
+                lookupA.Add(node.A, node);
+                lookupB.Add(node.B, node);
             }
         }
 
@@ -38,15 +38,22 @@ namespace Cave.Collections.Generic
         /// Adds an item pair to the end of the List.
         /// This is an O(1) operation.
         /// </summary>
-        /// <param name="A">The A object to be added</param>
-        /// <param name="B">The B object to be added</param>
-        public void Add(TKey1 A, TKey2 B)
+        /// <param name="key1">The A object to be added.</param>
+        /// <param name="key2">The B object to be added.</param>
+        public void Add(TKey1 key1, TKey2 key2)
         {
-            ItemPair<TKey1, TKey2> node = new ItemPair<TKey1, TKey2>(A, B);
-            m_LookupA.Add(A, node);
-            try { m_LookupB.Add(B, node); }
-            catch { m_LookupA.Remove(A); throw; }
-            m_List.Add(node);
+            ItemPair<TKey1, TKey2> node = new ItemPair<TKey1, TKey2>(key1, key2);
+            lookupA.Add(key1, node);
+            try
+            {
+                lookupB.Add(key2, node);
+            }
+            catch
+            {
+                lookupA.Remove(key1);
+                throw;
+            }
+            list.Add(node);
         }
 
         /// <summary>
@@ -54,59 +61,59 @@ namespace Cave.Collections.Generic
         /// </summary>
         public void Clear()
         {
-            m_List.Clear();
-            m_LookupA.Clear();
-            m_LookupB.Clear();
+            list.Clear();
+            lookupA.Clear();
+            lookupB.Clear();
         }
 
         /// <summary>Determines whether the specified A is part of the set.</summary>
-        /// <param name="A">The a value to check for</param>
+        /// <param name="key1">The a value to check for.</param>
         /// <returns><c>true</c> if present; otherwise, <c>false</c>.</returns>
-        public bool ContainsA(TKey1 A)
+        public bool ContainsA(TKey1 key1)
         {
-            return m_LookupA.ContainsKey(A);
+            return lookupA.ContainsKey(key1);
         }
 
         /// <summary>Determines whether the specified B is part of the set.</summary>
-        /// <param name="B">The b value to check for.</param>
+        /// <param name="key2">The b value to check for.</param>
         /// <returns><c>true</c> if present; otherwise, <c>false</c>.</returns>
-        public bool ContainsB(TKey2 B)
+        public bool ContainsB(TKey2 key2)
         {
-            return m_LookupB.ContainsKey(B);
+            return lookupB.ContainsKey(key2);
         }
 
         /// <summary>Tries to the get the a key.</summary>
-        /// <param name="a">The a key.</param>
-        /// <param name="b">The b key.</param>
+        /// <param name="key1">The a key.</param>
+        /// <param name="key2">The b key.</param>
         /// <returns></returns>
-        public bool TryGetA(TKey1 a, out TKey2 b)
+        public bool TryGetA(TKey1 key1, out TKey2 key2)
         {
-            if (m_LookupA.TryGetValue(a, out ItemPair<TKey1, TKey2> item))
+            if (lookupA.TryGetValue(key1, out ItemPair<TKey1, TKey2> item))
             {
-                b = item.B;
+                key2 = item.B;
                 return true;
             }
             else
             {
-                b = default(TKey2);
+                key2 = default(TKey2);
                 return false;
             }
         }
 
         /// <summary>Tries to the get the key b.</summary>
-        /// <param name="b">The b key.</param>
-        /// <param name="a">The a key.</param>
+        /// <param name="key2">The b key.</param>
+        /// <param name="key1">The a key.</param>
         /// <returns></returns>
-        public bool TryGetB(TKey2 b, out TKey1 a)
+        public bool TryGetB(TKey2 key2, out TKey1 key1)
         {
-            if (m_LookupB.TryGetValue(b, out ItemPair<TKey1, TKey2> item))
+            if (lookupB.TryGetValue(key2, out ItemPair<TKey1, TKey2> item))
             {
-                a = item.A;
+                key1 = item.A;
                 return true;
             }
             else
             {
-                a = default(TKey1);
+                key1 = default(TKey1);
                 return false;
             }
         }
@@ -115,83 +122,83 @@ namespace Cave.Collections.Generic
         /// Obtains the index of the specified A object.
         /// This is an O(1) operation.
         /// </summary>
-        /// <param name="A">'A' object to be found.</param>
+        /// <param name="key1">'A' object to be found.</param>
         /// <returns>The index of item if found in the list; otherwise, -1.</returns>
-        public int IndexOfA(TKey1 A)
+        public int IndexOfA(TKey1 key1)
         {
-            if (!m_LookupA.ContainsKey(A))
+            if (!lookupA.ContainsKey(key1))
             {
                 return -1;
             }
 
-            return m_List.IndexOf(m_LookupA[A]);
+            return list.IndexOf(lookupA[key1]);
         }
 
         /// <summary>
         /// Obtains the index of the specified B object.
         /// This is an O(1) operation.
         /// </summary>
-        /// <param name="B">'B' object to be found.</param>
+        /// <param name="key2">'B' object to be found.</param>
         /// <returns>The index of item if found in the list; otherwise, -1.</returns>
-        public int IndexOfB(TKey2 B)
+        public int IndexOfB(TKey2 key2)
         {
-            if (!m_LookupB.ContainsKey(B))
+            if (!lookupB.ContainsKey(key2))
             {
                 return -1;
             }
 
-            return m_List.IndexOf(m_LookupB[B]);
+            return list.IndexOf(lookupB[key2]);
         }
 
         /// <summary>Obtains a enumeration of the A elements of the Set.</summary>
         /// <value>The keys a.</value>
-        public IEnumerable<TKey1> KeysA => m_LookupA.Keys;
+        public IEnumerable<TKey1> KeysA => lookupA.Keys;
 
         /// <summary>Obtains a enumeration of the B elements of the Set.</summary>
         /// <value>The keys b.</value>
-        public IEnumerable<TKey2> KeysB => m_LookupB.Keys;
+        public IEnumerable<TKey2> KeysB => lookupB.Keys;
 
         /// <summary>
         /// Obtains a read only indexed list for the A elements of the Set.
-        /// This method is an O(1) operation;
+        /// This method is an O(1) operation;.
         /// </summary>
         public IList<TKey1> ItemsA => new ReadOnlyListA<TKey1, TKey2>(this);
 
         /// <summary>
         /// Obtains a read only indexed list for the B elements of the Set.
-        /// This method is an O(1) operation;
+        /// This method is an O(1) operation;.
         /// </summary>
         public IList<TKey2> ItemsB => new ReadOnlyListB<TKey1, TKey2>(this);
 
         /// <summary>
         /// Obtains the A element that is assigned to the specified B element.
-        /// This method is an O(1) operation;
+        /// This method is an O(1) operation;.
         /// </summary>
-        /// <param name="B">The B index.</param>
+        /// <param name="key2">The B index.</param>
         /// <returns></returns>
-        public ItemPair<TKey1, TKey2> GetB(TKey2 B)
+        public ItemPair<TKey1, TKey2> GetB(TKey2 key2)
         {
-            return m_LookupB[B];
+            return lookupB[key2];
         }
 
         /// <summary>
         /// Obtains the A element that is assigned to the specified B element.
-        /// This method is an O(1) operation;
+        /// This method is an O(1) operation;.
         /// </summary>
-        /// <param name="A">The A index.</param>
+        /// <param name="key1">The A index.</param>
         /// <returns></returns>
-        public ItemPair<TKey1, TKey2> GetA(TKey1 A)
+        public ItemPair<TKey1, TKey2> GetA(TKey1 key1)
         {
-            return m_LookupA[A];
+            return lookupA[key1];
         }
 
         /// <summary>
         /// Gets the number of elements actually present at the Set.
         /// </summary>
-        public int Count => m_List.Count;
+        public int Count => list.Count;
 
         /// <summary>
-        /// Returns false
+        /// Returns false.
         /// </summary>
         public bool IsReadOnly => false;
 
@@ -201,7 +208,7 @@ namespace Cave.Collections.Generic
         /// <returns>An IEnumerator object that can be used to iterate through the set.</returns>
         public IEnumerator<ItemPair<TKey1, TKey2>> GetEnumerator()
         {
-            return m_List.GetEnumerator();
+            return list.GetEnumerator();
         }
 
         /// <summary>
@@ -210,7 +217,7 @@ namespace Cave.Collections.Generic
         /// <returns>An IEnumerator object that can be used to iterate through the set.</returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return m_List.GetEnumerator();
+            return list.GetEnumerator();
         }
 
         /// <summary>
@@ -221,19 +228,19 @@ namespace Cave.Collections.Generic
         /// <returns>The index of the ItemPair if found in the list; otherwise, -1.</returns>
         public int IndexOf(ItemPair<TKey1, TKey2> item)
         {
-            return m_List.IndexOf(item);
+            return list.IndexOf(item);
         }
 
         /// <summary>
         /// Obtains the index of the specified ItemPair.
         /// This is an O(1) operation.
         /// </summary>
-        /// <param name="A">The A value of the ItemPair to search for.</param>
-        /// <param name="B">The B value of the ItemPair to search for.</param>
+        /// <param name="key1">The A value of the ItemPair to search for.</param>
+        /// <param name="key2">The B value of the ItemPair to search for.</param>
         /// <returns>The index of the ItemPair if found in the list; otherwise, -1.</returns>
-        public int IndexOf(TKey1 A, TKey2 B)
+        public int IndexOf(TKey1 key1, TKey2 key2)
         {
-            return IndexOf(new ItemPair<TKey1, TKey2>(A, B));
+            return IndexOf(new ItemPair<TKey1, TKey2>(key1, key2));
         }
 
         /// <summary>
@@ -241,11 +248,11 @@ namespace Cave.Collections.Generic
         /// This method needs a full index rebuild and is an O(n) operation, where n is Count.
         /// </summary>
         /// <param name="index">The index to insert the item at.</param>
-        /// <param name="A">The A value of the ItemPair to insert.</param>
-        /// <param name="B">The B value of the ItemPair to insert.</param>
-        public void Insert(int index, TKey1 A, TKey2 B)
+        /// <param name="key1">The A value of the ItemPair to insert.</param>
+        /// <param name="key2">The B value of the ItemPair to insert.</param>
+        public void Insert(int index, TKey1 key1, TKey2 key2)
         {
-            Insert(index, new ItemPair<TKey1, TKey2>(A, B));
+            Insert(index, new ItemPair<TKey1, TKey2>(key1, key2));
         }
 
         /// <summary>
@@ -261,10 +268,17 @@ namespace Cave.Collections.Generic
                 throw new ArgumentNullException("item");
             }
 
-            m_LookupA.Add(item.A, item);
-            try { m_LookupB.Add(item.B, item); }
-            catch { m_LookupA.Remove(item.A); throw; }
-            m_List.Insert(index, item);
+            lookupA.Add(item.A, item);
+            try
+            {
+                lookupB.Add(item.B, item);
+            }
+            catch
+            {
+                lookupA.Remove(item.A);
+                throw;
+            }
+            list.Insert(index, item);
         }
 
         /// <summary>
@@ -276,13 +290,13 @@ namespace Cave.Collections.Generic
         {
             try
             {
-                ItemPair<TKey1, TKey2> node = m_List[index];
-                if (!m_LookupA.Remove(node.A))
+                ItemPair<TKey1, TKey2> node = list[index];
+                if (!lookupA.Remove(node.A))
                 {
                     throw new KeyNotFoundException();
                 }
 
-                if (!m_LookupB.Remove(node.B))
+                if (!lookupB.Remove(node.B))
                 {
                     throw new KeyNotFoundException();
                 }
@@ -302,7 +316,7 @@ namespace Cave.Collections.Generic
         /// <returns></returns>
         public ItemPair<TKey1, TKey2> this[int index]
         {
-            get => m_List[index];
+            get => list[index];
             set
             {
                 if (value == null)
@@ -310,26 +324,33 @@ namespace Cave.Collections.Generic
                     throw new ArgumentNullException("value");
                 }
 
-                ItemPair<TKey1, TKey2> old = m_List[index];
-                if (!m_LookupA.Remove(old.A))
+                ItemPair<TKey1, TKey2> old = list[index];
+                if (!lookupA.Remove(old.A))
                 {
                     throw new KeyNotFoundException();
                 }
 
-                if (!m_LookupB.Remove(old.B))
+                if (!lookupB.Remove(old.B))
                 {
                     throw new KeyNotFoundException();
                 }
 
-                m_LookupA.Add(value.A, value);
-                try { m_LookupB.Add(value.B, value); }
-                catch { Clear(); throw; }
-                m_List[index] = value;
+                lookupA.Add(value.A, value);
+                try
+                {
+                    lookupB.Add(value.B, value);
+                }
+                catch
+                {
+                    Clear();
+                    throw;
+                }
+                list[index] = value;
             }
         }
 
         /// <summary>
-        /// Adds an itempair to the set
+        /// Adds an itempair to the set.
         /// </summary>
         /// <param name="item"></param>
         public void Add(ItemPair<TKey1, TKey2> item)
@@ -343,7 +364,7 @@ namespace Cave.Collections.Generic
         }
 
         /// <summary>
-        /// Checks whether the list contains an itempair or not
+        /// Checks whether the list contains an itempair or not.
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -358,14 +379,14 @@ namespace Cave.Collections.Generic
         }
 
         /// <summary>
-        /// Checks whether the list contains an itempair or not
+        /// Checks whether the list contains an itempair or not.
         /// </summary>
-        /// <param name="A"></param>
-        /// <param name="B"></param>
+        /// <param name="key1"></param>
+        /// <param name="key2"></param>
         /// <returns></returns>
-        public bool Contains(TKey1 A, TKey2 B)
+        public bool Contains(TKey1 key1, TKey2 key2)
         {
-            return m_LookupA.ContainsKey(A) && Equals(m_LookupA[A].B, B);
+            return lookupA.ContainsKey(key1) && Equals(lookupA[key1].B, key2);
         }
 
         /// <summary>
@@ -375,11 +396,11 @@ namespace Cave.Collections.Generic
         /// <param name="arrayIndex"></param>
         public void CopyTo(ItemPair<TKey1, TKey2>[] array, int arrayIndex)
         {
-            m_List.CopyTo(array, arrayIndex);
+            list.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
-        /// Removes an itempair from the set
+        /// Removes an itempair from the set.
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -392,9 +413,9 @@ namespace Cave.Collections.Generic
 
             try
             {
-                m_LookupA.Remove(item.A);
-                m_LookupB.Remove(item.B);
-                return m_List.Remove(item);
+                lookupA.Remove(item.A);
+                lookupB.Remove(item.B);
+                return list.Remove(item);
             }
             catch
             {
@@ -403,39 +424,39 @@ namespace Cave.Collections.Generic
             }
         }
 
-        /// <summary>Removes the item with the specified A key</summary>
-        /// <param name="A">The A key</param>
+        /// <summary>Removes the item with the specified A key.</summary>
+        /// <param name="key1">The A key.</param>
         /// <exception cref="KeyNotFoundException">The exception that is thrown when the key specified for accessing an element in a collection does not match any key in the collection.</exception>
-        public void RemoveA(TKey1 A)
+        public void RemoveA(TKey1 key1)
         {
-            Remove(GetA(A));
+            Remove(GetA(key1));
         }
 
-        /// <summary>Removes the item with the specified B key</summary>
-        /// <param name="B">The A key</param>
+        /// <summary>Removes the item with the specified B key.</summary>
+        /// <param name="key2">The A key.</param>
         /// <exception cref="KeyNotFoundException">The exception that is thrown when the key specified for accessing an element in a collection does not match any key in the collection.</exception>
-        public void RemoveB(TKey2 B)
+        public void RemoveB(TKey2 key2)
         {
-            Remove(GetB(B));
+            Remove(GetB(key2));
         }
 
         /// <summary>
-        /// Removes an itempair from the set
+        /// Removes an itempair from the set.
         /// </summary>
-        /// <param name="A"></param>
-        /// <param name="B"></param>
+        /// <param name="key1"></param>
+        /// <param name="key2"></param>
         /// <returns></returns>
-        public bool Remove(TKey1 A, TKey2 B)
+        public bool Remove(TKey1 key1, TKey2 key2)
         {
-            return Remove(new ItemPair<TKey1, TKey2>(A, B));
+            return Remove(new ItemPair<TKey1, TKey2>(key1, key2));
         }
 
         /// <summary>
-        /// Reverses the index of the set
+        /// Reverses the index of the set.
         /// </summary>
         public void Reverse()
         {
-            m_List.Reverse();
+            list.Reverse();
             RebuildIndex();
         }
     }

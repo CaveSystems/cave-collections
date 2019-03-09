@@ -7,12 +7,17 @@ using Cave.Collections.Generic;
 namespace Cave.Collections
 {
     /// <summary>
-    /// Provides a simple moving average calculation
+    /// Provides a simple moving average calculation.
     /// </summary>
     /// <seealso cref="IAverage{T}" />
     public class ExpiringMovingAverageFloat : IAverage<float>
     {
-        LinkedList<C<DateTime, float>> items = new LinkedList<C<DateTime, float>>();
+        class Item
+        {
+            public DateTime DateTime;
+            public float Float;
+        }
+        LinkedList<Item> items = new LinkedList<Item>();
         float total;
 
         /// <summary>Gets the average for the current items.</summary>
@@ -37,7 +42,7 @@ namespace Cave.Collections
             {
                 if (items.Count > 1)
                 {
-                    return items.Last.Value.V1 - items.First.Value.V1;
+                    return items.Last.Value.DateTime - items.First.Value.DateTime;
                 }
                 return TimeSpan.Zero;
             }
@@ -51,22 +56,22 @@ namespace Cave.Collections
         /// <param name="item">The item.</param>
         public void Add(float item)
         {
-            items.AddLast(new C<DateTime, float>(DateTime.UtcNow, item));
+            items.AddLast(new Item() { DateTime = DateTime.UtcNow, Float = item, });
             total += item;
             if (MaximumCount > 0)
             {
                 while (items.Count > MaximumCount)
                 {
-                    total -= items.First.Value.V2;
+                    total -= items.First.Value.Float;
                     items.RemoveFirst();
                 }
             }
             if (MaximumAge > TimeSpan.Zero)
             {
                 DateTime keepAfter = DateTime.UtcNow - MaximumAge;
-                while (items.First.Value.V1 < keepAfter)
+                while (items.First.Value.DateTime < keepAfter)
                 {
-                    total -= items.First.Value.V2;
+                    total -= items.First.Value.Float;
                     items.RemoveFirst();
                 }
             }
@@ -83,7 +88,7 @@ namespace Cave.Collections
         /// <returns>An enumerator that can be used to iterate through the collection.</returns>
         public IEnumerator<float> GetEnumerator()
         {
-            return items.Select(i => i.V2).GetEnumerator();
+            return items.Select(i => i.Float).GetEnumerator();
         }
 
         /// <summary>Returns an enumerator that iterates through a collection.</summary>
@@ -92,7 +97,7 @@ namespace Cave.Collections
         /// </returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return items.Select(i => i.V2).GetEnumerator();
+            return items.Select(i => i.Float).GetEnumerator();
         }
     }
 }

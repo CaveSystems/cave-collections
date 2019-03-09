@@ -3,7 +3,7 @@
 namespace Cave.Collections
 {
     /// <summary>
-    /// Interface for average calculations
+    /// Interface for average calculations.
     /// </summary>
     public interface IAverage<T> : IEnumerable<T>
     {

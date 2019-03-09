@@ -1,27 +1,29 @@
+#if !NET35 && !NET20
+using System;
+using System.Collections;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using Cave.Collections.Generic;
+#endif
+
 namespace Cave.Collections.Concurrent
 {
 #if NET35 || NET20
-	//This class is not available in NET20
+    // This class is not available in NET20
 #else
-    using System;
-    using System.Collections;
-    using System.Collections.Concurrent;
-    using System.Collections.Generic;
-    using Cave.Collections.Generic;
-
     /// <summary>
-    /// Provides a concurrent set based on the <see cref="ConcurrentDictionary{T1, T2}"/> class
+    /// Provides a concurrent set based on the <see cref="ConcurrentDictionary{T1, T2}"/> class.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class ConcurrentSet<T> : ICollection<T>, ICollection, IEquatable<ConcurrentSet<T>>
     {
-        #region operators
+    #region operators
 
         /// <summary>
-        /// Obtains a <see cref="ConcurrentSet{T}"/> containing all objects part of one of the specified sets
+        /// Obtains a <see cref="ConcurrentSet{T}"/> containing all objects part of one of the specified sets.
         /// </summary>
-        /// <param name="set1">The first set used to calculate the result</param>
-        /// <param name="set2">The second set used to calculate the result</param>
+        /// <param name="set1">The first set used to calculate the result.</param>
+        /// <param name="set2">The second set used to calculate the result.</param>
         /// <returns>Returns a new <see cref="ConcurrentSet{T}"/> containing the result.</returns>
         public static ConcurrentSet<T> operator |(ConcurrentSet<T> set1, ConcurrentSet<T> set2)
         {
@@ -29,10 +31,10 @@ namespace Cave.Collections.Concurrent
         }
 
         /// <summary>
-        /// Obtains a <see cref="ConcurrentSet{T}"/> containing only objects part of both of the specified sets
+        /// Obtains a <see cref="ConcurrentSet{T}"/> containing only objects part of both of the specified sets.
         /// </summary>
-        /// <param name="set1">The first set used to calculate the result</param>
-        /// <param name="set2">The second set used to calculate the result</param>
+        /// <param name="set1">The first set used to calculate the result.</param>
+        /// <param name="set2">The second set used to calculate the result.</param>
         /// <returns>Returns a new <see cref="Set{T}"/> containing the result.</returns>
         public static ConcurrentSet<T> operator &(ConcurrentSet<T> set1, ConcurrentSet<T> set2)
         {
@@ -42,8 +44,8 @@ namespace Cave.Collections.Concurrent
         /// <summary>
         /// Obtains a <see cref="ConcurrentSet{T}"/> containing all objects part of the first set after removing all objects present at the second set.
         /// </summary>
-        /// <param name="set1">The first set used to calculate the result</param>
-        /// <param name="set2">The second set used to calculate the result</param>
+        /// <param name="set1">The first set used to calculate the result.</param>
+        /// <param name="set2">The second set used to calculate the result.</param>
         /// <returns>Returns a new <see cref="ConcurrentSet{T}"/> containing the result.</returns>
         public static ConcurrentSet<T> operator -(ConcurrentSet<T> set1, ConcurrentSet<T> set2)
         {
@@ -53,8 +55,8 @@ namespace Cave.Collections.Concurrent
         /// <summary>
         /// Builds a new <see cref="ConcurrentSet{T}"/> containing only the items found exclusivly in one of both specified sets.
         /// </summary>
-        /// <param name="set1">The first set used to calculate the result</param>
-        /// <param name="set2">The second set used to calculate the result</param>
+        /// <param name="set1">The first set used to calculate the result.</param>
+        /// <param name="set2">The second set used to calculate the result.</param>
         /// <returns>Returns a new <see cref="ConcurrentSet{T}"/> containing the result.</returns>
         public static ConcurrentSet<T> operator ^(ConcurrentSet<T> set1, ConcurrentSet<T> set2)
         {
@@ -62,19 +64,19 @@ namespace Cave.Collections.Concurrent
         }
 
         /// <summary>
-        /// Checks two sets for equality
+        /// Checks two sets for equality.
         /// </summary>
         /// <param name="set1"></param>
         /// <param name="set2"></param>
         /// <returns></returns>
         public static bool operator ==(ConcurrentSet<T> set1, ConcurrentSet<T> set2)
         {
-            if (ReferenceEquals(set1, null))
+            if (set1 is null)
             {
-                return (ReferenceEquals(set2, null));
+                return set2 is null;
             }
 
-            if (ReferenceEquals(set2, null))
+            if (set2 is null)
             {
                 return false;
             }
@@ -83,7 +85,7 @@ namespace Cave.Collections.Concurrent
         }
 
         /// <summary>
-        /// Checks two sets for inequality
+        /// Checks two sets for inequality.
         /// </summary>
         /// <param name="set1"></param>
         /// <param name="set2"></param>
@@ -92,15 +94,15 @@ namespace Cave.Collections.Concurrent
         {
             return !(set1 == set2);
         }
-        #endregion
+    #endregion
 
-        #region static Member
+    #region static Member
 
         /// <summary>
-        /// Builds the union of two specified <see cref="Set{T}"/>s
+        /// Builds the union of two specified <see cref="Set{T}"/>s.
         /// </summary>
-        /// <param name="set1">The first set used to calculate the result</param>
-        /// <param name="set2">The second set used to calculate the result</param>
+        /// <param name="set1">The first set used to calculate the result.</param>
+        /// <param name="set2">The second set used to calculate the result.</param>
         /// <returns>Returns a new <see cref="Set{T}"/> containing the result.</returns>
         public static ConcurrentSet<T> BitwiseOr(ConcurrentSet<T> set1, ConcurrentSet<T> set2)
         {
@@ -134,10 +136,10 @@ namespace Cave.Collections.Concurrent
         }
 
         /// <summary>
-        /// Builds the intersection of two specified <see cref="ConcurrentSet{T}"/>s
+        /// Builds the intersection of two specified <see cref="ConcurrentSet{T}"/>s.
         /// </summary>
-        /// <param name="set1">The first set used to calculate the result</param>
-        /// <param name="set2">The second set used to calculate the result</param>
+        /// <param name="set1">The first set used to calculate the result.</param>
+        /// <param name="set2">The second set used to calculate the result.</param>
         /// <returns>Returns a new <see cref="ConcurrentSet{T}"/> containing the result.</returns>
         public static ConcurrentSet<T> BitwiseAnd(ConcurrentSet<T> set1, ConcurrentSet<T> set2)
         {
@@ -168,10 +170,10 @@ namespace Cave.Collections.Concurrent
         }
 
         /// <summary>
-        /// Subtracts the specified <see cref="ConcurrentSet{T}"/> from this one and returns a new <see cref="ConcurrentSet{T}"/> containing the result
+        /// Subtracts the specified <see cref="ConcurrentSet{T}"/> from this one and returns a new <see cref="ConcurrentSet{T}"/> containing the result.
         /// </summary>
-        /// <param name="set1">The first set used to calculate the result</param>
-        /// <param name="set2">The second set used to calculate the result</param>
+        /// <param name="set1">The first set used to calculate the result.</param>
+        /// <param name="set2">The second set used to calculate the result.</param>
         /// <returns>Returns a new <see cref="ConcurrentSet{T}"/> containing the result.</returns>
         public static ConcurrentSet<T> Subtract(ConcurrentSet<T> set1, ConcurrentSet<T> set2)
         {
@@ -199,8 +201,8 @@ namespace Cave.Collections.Concurrent
         /// <summary>
         /// Builds a new <see cref="Set{T}"/> containing only items found exclusivly in one of both specified sets.
         /// </summary>
-        /// <param name="set1">The first set used to calculate the result</param>
-        /// <param name="set2">The second set used to calculate the result</param>
+        /// <param name="set1">The first set used to calculate the result.</param>
+        /// <param name="set2">The second set used to calculate the result.</param>
         /// <returns>Returns a new <see cref="Set{T}"/> containing the result.</returns>
         public static ConcurrentSet<T> Xor(ConcurrentSet<T> set1, ConcurrentSet<T> set2)
         {
@@ -236,25 +238,25 @@ namespace Cave.Collections.Concurrent
             return result;
         }
 
-        #endregion
+    #endregion
 
-        #region private Member
+    #region private Member
 
-        ConcurrentDictionary<T, byte> m_List = new ConcurrentDictionary<T, byte>();
+        ConcurrentDictionary<T, byte> list = new ConcurrentDictionary<T, byte>();
 
-        #endregion
+    #endregion
 
-        #region constructors
+    #region constructors
 
         /// <summary>
-        /// Creates a new empty set
+        /// Creates a new empty set.
         /// </summary>
         public ConcurrentSet()
         {
         }
 
         /// <summary>
-        /// Creates a new set with the specified items
+        /// Creates a new set with the specified items.
         /// </summary>
         public ConcurrentSet(params T[] items)
         {
@@ -262,16 +264,16 @@ namespace Cave.Collections.Concurrent
         }
 
         /// <summary>
-        /// Creates a new set with the specified items
+        /// Creates a new set with the specified items.
         /// </summary>
         public ConcurrentSet(IEnumerable<T> items)
         {
             AddRange(items);
         }
 
-        #endregion
+    #endregion
 
-        #region public Member
+    #region public Member
 
         /// <summary>
         /// Builds the union of the specified and this <see cref="ConcurrentSet{T}"/> and returns a new set with the result.
@@ -314,15 +316,15 @@ namespace Cave.Collections.Concurrent
         }
 
         /// <summary>
-        /// Checks whether a specified object is part of the set
+        /// Checks whether a specified object is part of the set.
         /// </summary>
         public bool Contains(T item)
         {
-            return m_List.ContainsKey(item);
+            return list.ContainsKey(item);
         }
 
         /// <summary>
-        /// Checks whether all specified objects are part of the set
+        /// Checks whether all specified objects are part of the set.
         /// </summary>
         public bool ContainsRange(IEnumerable<T> items)
         {
@@ -340,26 +342,26 @@ namespace Cave.Collections.Concurrent
         }
 
         /// <summary>
-        /// Returns true if the set was empty
+        /// Gets a value indicating whether the set was empty or not.
         /// </summary>
-        public bool IsEmpty => m_List.Count == 0;
+        public bool IsEmpty => list.Count == 0;
 
         /// <summary>
-        /// Adds a specified object to the set
+        /// Adds a specified object to the set.
         /// </summary>
-        /// <param name="item">The object to be added to the set</param>
+        /// <param name="item">The object to be added to the set.</param>
         public void Add(T item)
         {
-            if (!m_List.TryAdd(item, 0))
+            if (!list.TryAdd(item, 0))
             {
                 throw new ArgumentException("An element with the same key already exists!");
             }
         }
 
         /// <summary>
-        /// Adds a range of objects to the set
+        /// Adds a range of objects to the set.
         /// </summary>
-        /// <param name="items">The objects to be added to the list</param>
+        /// <param name="items">The objects to be added to the list.</param>
         public void AddRange(IEnumerable<T> items)
         {
             if (items == null)
@@ -367,21 +369,24 @@ namespace Cave.Collections.Concurrent
                 throw new ArgumentNullException("items");
             }
 
-            foreach (T obj in items) { Add(obj); }
+            foreach (T obj in items)
+            {
+                Add(obj);
+            }
         }
 
         /// <summary>Includes an object that is not already present in the set (others are ignored).</summary>
-        /// <param name="obj">The object to be included</param>
-        /// <returns>Returns true if the object was new, false otherwise</returns>
+        /// <param name="obj">The object to be included.</param>
+        /// <returns>Returns true if the object was new, false otherwise.</returns>
         public bool Include(T obj)
         {
-            return m_List.TryAdd(obj, 0);
+            return list.TryAdd(obj, 0);
         }
 
         /// <summary>
         /// Includes objects that are not already present in the set (others are ignored).
         /// </summary>
-        /// <param name="items">The objects to be included</param>
+        /// <param name="items">The objects to be included.</param>
         public void IncludeRange(IEnumerable<T> items)
         {
             if (items == null)
@@ -389,16 +394,19 @@ namespace Cave.Collections.Concurrent
                 throw new ArgumentNullException("items");
             }
 
-            foreach (T obj in items) { Include(obj); }
+            foreach (T obj in items)
+            {
+                Include(obj);
+            }
         }
 
         /// <summary>
-        /// Removes an object from the set
+        /// Removes an object from the set.
         /// </summary>
-        /// <param name="item">The object to be removed</param>
+        /// <param name="item">The object to be removed.</param>
         public bool Remove(T item)
         {
-            if (!m_List.TryRemove(item, out byte b))
+            if (!list.TryRemove(item, out byte b))
             {
                 throw new KeyNotFoundException();
             }
@@ -406,7 +414,7 @@ namespace Cave.Collections.Concurrent
         }
 
         /// <summary>
-        /// Removes objects from the set
+        /// Removes objects from the set.
         /// </summary>
         public void RemoveRange(IEnumerable<T> items)
         {
@@ -415,40 +423,43 @@ namespace Cave.Collections.Concurrent
                 throw new ArgumentNullException("items");
             }
 
-            foreach (T obj in items) { Remove(obj); }
+            foreach (T obj in items)
+            {
+                Remove(obj);
+            }
         }
 
         /// <summary>
-        /// Clears the set
+        /// Clears the set.
         /// </summary>
         public void Clear()
         {
-            m_List.Clear();
+            list.Clear();
         }
-        #endregion
+    #endregion
 
-        #region ICollection Member
+    #region ICollection Member
 
         /// <summary>
-        /// Copies all objects present at the set to the specified array, starting at a specified index
+        /// Copies all objects present at the set to the specified array, starting at a specified index.
         /// </summary>
-        /// <param name="array">one-dimensional array to copy to</param>
-        /// <param name="arrayIndex">the zero-based index in array at which copying begins</param>
+        /// <param name="array">one-dimensional array to copy to.</param>
+        /// <param name="arrayIndex">the zero-based index in array at which copying begins.</param>
         public void CopyTo(T[] array, int arrayIndex)
         {
-            m_List.Keys.CopyTo(array, arrayIndex);
+            list.Keys.CopyTo(array, arrayIndex);
         }
 
         /// <summary>
-        /// Obtains the number of objects present at the set
+        /// Obtains the number of objects present at the set.
         /// </summary>
-        public int Count => m_List.Count;
+        public int Count => list.Count;
 
         /// <summary>
-        /// Copies all objects present at the set to the specified array, starting at a specified index
+        /// Copies all objects present at the set to the specified array, starting at a specified index.
         /// </summary>
-        /// <param name="array">one-dimensional array to copy to</param>
-        /// <param name="index">the zero-based index in array at which copying begins</param>
+        /// <param name="array">one-dimensional array to copy to.</param>
+        /// <param name="index">the zero-based index in array at which copying begins.</param>
         public void CopyTo(Array array, int index)
         {
             if (array == null)
@@ -463,69 +474,69 @@ namespace Cave.Collections.Concurrent
         }
 
         /// <summary>
-        /// Returns false
+        /// Returns false.
         /// </summary>
         public bool IsSynchronized => false;
 
         /// <summary>
-        /// Returns this
+        /// Returns this.
         /// </summary>
         public object SyncRoot => this;
-        #endregion
+    #endregion
 
-        #region IEnumerable Member
+    #region IEnumerable Member
 
         /// <summary>
-        /// Obtains an <see cref="IEnumerator"/> for this set
+        /// Obtains an <see cref="IEnumerator"/> for this set.
         /// </summary>
         public IEnumerator GetEnumerator()
         {
-            return m_List.Keys.GetEnumerator();
+            return list.Keys.GetEnumerator();
         }
 
-        #endregion
+    #endregion
 
-        #region ICollection<T> Member
+    #region ICollection<T> Member
 
         /// <summary>
-        /// Returns false
+        /// Gets a value indicating whether the set is readonly or not.
         /// </summary>
         public bool IsReadOnly => false;
 
-        #endregion
+    #endregion
 
-        #region IEnumerable<T> Member
+    #region IEnumerable<T> Member
 
         /// <summary>
-        /// Obtains an <see cref="IEnumerator"/> for this set
+        /// Obtains an <see cref="IEnumerator"/> for this set.
         /// </summary>
         IEnumerator<T> IEnumerable<T>.GetEnumerator()
         {
-            return m_List.Keys.GetEnumerator();
+            return list.Keys.GetEnumerator();
         }
 
-        #endregion
+    #endregion
 
         /// <summary>
-        /// Obtains an array of all elements present
+        /// Obtains an array of all elements present.
         /// </summary>
         /// <returns></returns>
         public T[] ToArray()
         {
-            T[] result = new T[m_List.Count];
-            m_List.Keys.CopyTo(result, 0);
+            T[] result = new T[list.Count];
+            list.Keys.CopyTo(result, 0);
             return result;
         }
 
         /// <summary>
-        /// Checks another Set{T} instance for equality
+        /// Checks another Set{T} instance for equality.
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
         public override bool Equals(object obj)
         {
             ConcurrentSet<T> other = obj as ConcurrentSet<T>;
-            if (null == other)
+            if (other == null)
             {
                 return false;
             }
@@ -534,7 +545,7 @@ namespace Cave.Collections.Concurrent
         }
 
         /// <summary>
-        /// Checks another Set{T} instance for equality
+        /// Checks another Set{T} instance for equality.
         /// </summary>
         /// <param name="other"></param>
         /// <returns></returns>
@@ -559,7 +570,7 @@ namespace Cave.Collections.Concurrent
         /// <returns></returns>
         public override int GetHashCode()
         {
-            return m_List.GetHashCode();
+            return list.GetHashCode();
         }
     }
 #endif

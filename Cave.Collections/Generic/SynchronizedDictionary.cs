@@ -16,37 +16,95 @@ namespace Cave.Collections.Generic
         IDictionary<TKey, TValue> dict;
 
         /// <summary>Initializes a new instance of the <see cref="SynchronizedDictionary{TKey, TValue}"/> class.</summary>
-        public SynchronizedDictionary() { dict = new Dictionary<TKey, TValue>(); }
+        public SynchronizedDictionary()
+        {
+            dict = new Dictionary<TKey, TValue>();
+        }
 
         /// <summary>Initializes a new instance of the <see cref="SynchronizedDictionary{TKey, TValue}"/> class.</summary>
         /// <param name="dictionary">The dictionary.</param>
-        public SynchronizedDictionary(IDictionary<TKey, TValue> dictionary) { dict = dictionary; }
+        public SynchronizedDictionary(IDictionary<TKey, TValue> dictionary)
+        {
+            dict = dictionary;
+        }
 
         /// <summary>Gets or sets the value with the specified key.</summary>
         /// <value>The value.</value>
         /// <param name="key">The key.</param>
         /// <returns></returns>
-        public TValue this[TKey key] { get { lock (this) { return dict[key]; } } set { lock (this) { dict[key] = value; } } }
+        public TValue this[TKey key]
+        {
+            get
+            {
+                lock (this)
+                {
+                    return dict[key];
+                }
+            }
+            set
+            {
+                lock (this)
+                {
+                    dict[key] = value;
+                }
+            }
+        }
 
         /// <summary>
         /// Ruft die Anzahl der Elemente ab, die in <see cref="T:System.Collections.Generic.ICollection`1" /> enthalten sind.
         /// </summary>
-        public int Count { get { lock (this) { return dict.Count; } } }
+        public int Count
+        {
+            get
+            {
+                lock (this)
+                {
+                    return dict.Count;
+                }
+            }
+        }
 
         /// <summary>
         /// Ruft einen Wert ab, der angibt, ob <see cref="T:System.Collections.Generic.ICollection`1" /> schreibgeschützt ist.
         /// </summary>
-        public bool IsReadOnly { get { lock (this) { return dict.IsReadOnly; } } }
+        public bool IsReadOnly
+        {
+            get
+            {
+                lock (this)
+                {
+                    return dict.IsReadOnly;
+                }
+            }
+        }
 
         /// <summary>
         /// Ruft eine <see cref="T:System.Collections.Generic.ICollection`1" />-Schnittstelle ab, die die Schlüssel von <see cref="T:System.Collections.Generic.IDictionary`2" /> enthält.
         /// </summary>
-        public ICollection<TKey> Keys { get { lock (this) { return dict.Keys.ToArray(); } } }
+        public ICollection<TKey> Keys
+        {
+            get
+            {
+                lock (this)
+                {
+                    return dict.Keys.ToArray();
+                }
+            }
+        }
 
         /// <summary>
         /// Ruft eine <see cref="T:System.Collections.Generic.ICollection`1" /> ab, die die Werte in <see cref="T:System.Collections.Generic.IDictionary`2" /> enthält.
         /// </summary>
-        public ICollection<TValue> Values { get { lock (this) { return dict.Values.ToArray(); } } }
+        public ICollection<TValue> Values
+        {
+            get
+            {
+                lock (this)
+                {
+                    return dict.Values.ToArray();
+                }
+            }
+        }
 
         /// <summary>Tries to add a new item to the dictionary.</summary>
         /// <param name="key">The key.</param>
@@ -189,7 +247,7 @@ namespace Cave.Collections.Generic
 
         /// <summary>Tries to remove the specified key.</summary>
         /// <param name="key">The key.</param>
-        /// <returns>Returns true on successful remove or false is </returns>
+        /// <returns>Returns true on successful remove or false is. </returns>
         public bool TryRemove(TKey key)
         {
             bool removed = false;
@@ -207,7 +265,7 @@ namespace Cave.Collections.Generic
         /// <summary>Tries to remove the specified key.</summary>
         /// <param name="key">The key.</param>
         /// <param name="value">The value.</param>
-        /// <returns>Returns true on successful remove or false otherwise</returns>
+        /// <returns>Returns true on successful remove or false otherwise.</returns>
         public bool TryRemove(TKey key, out TValue value)
         {
             bool removed = false;
@@ -301,7 +359,7 @@ namespace Cave.Collections.Generic
         }
 
         /// <summary>Returns an enumerator that iterates through the collection.</summary>
-        /// <remarks>This function may have a big impact on memory usage, since it needs to create a flat copy of the whole dictionary!</remarks>
+        /// <remarks>This function may have a big impact on memory usage, since it needs to create a flat copy of the whole dictionary!.</remarks>
         /// <returns>An enumerator that can be used to iterate through the collection.</returns>
         IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
         {
@@ -314,7 +372,7 @@ namespace Cave.Collections.Generic
         }
 
         /// <summary>Returns an enumerator that iterates through a collection.</summary>
-        /// <remarks>This function may have a big impact on memory usage, since it needs to create a flat copy of the whole dictionary!</remarks>
+        /// <remarks>This function may have a big impact on memory usage, since it needs to create a flat copy of the whole dictionary!.</remarks>
         /// <returns>
         /// An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.
         /// </returns>

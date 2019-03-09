@@ -3,7 +3,7 @@
 namespace Cave.Collections.Generic
 {
     /// <summary>
-    /// Provides extensions for dictionaryies
+    /// Provides extensions for dictionaryies.
     /// </summary>
     public static class DictionaryExtensions
     {
